@@ -255,6 +255,71 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 .attention{animation:pulse 1s ease 2}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 0%,transparent)}50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 45%,transparent)}}
 
+/* ============ Início: escolher a aula ============ */
+.home{max-width:1180px; margin:0 auto; padding:8px 20px 60px}
+@media (max-width:480px){ .home{padding-left:16px; padding-right:16px} }
+.home-title{margin:8px 0 6px; font-family:var(--font-display); font-weight:800; font-size:clamp(1.9rem,1.3rem + 2.4vw,2.8rem); line-height:1.1}
+.home-title:focus{outline:none}
+.home-lead{margin:0 0 22px; font-size:clamp(1.2rem,1.1rem + .5vw,1.45rem)}
+.aulas{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr)); gap:20px}
+.aula-card{
+  display:flex; flex-direction:column; align-items:flex-start; gap:12px; width:100%; text-align:left;
+  padding:26px; border-radius:22px; border:3px solid var(--line); background:var(--surface); box-shadow:var(--shadow); cursor:pointer;
+}
+.aula-card:hover{border-color:var(--primary)}
+.aula-card[disabled]{cursor:default; border-style:dashed; box-shadow:none; opacity:.8}
+.aula-card[disabled]:hover{border-color:var(--line)}
+.aula-top{display:flex; align-items:center; gap:16px}
+.aula-num{
+  width:64px; height:64px; border-radius:50%; flex:none; display:grid; place-items:center;
+  background:var(--primary); color:var(--on-primary); font-family:var(--font-display); font-weight:800; font-size:2rem;
+}
+.aula-card.is-done .aula-num{background:var(--success); color:#fff}
+.aula-card[disabled] .aula-num{background:var(--ground); color:var(--ink-soft)}
+.aula-kicker{display:block; color:var(--accent); font-weight:800; font-size:.95rem; text-transform:uppercase; letter-spacing:.06em}
+.aula-name{display:block; font-family:var(--font-display); font-weight:800; font-size:clamp(1.5rem,1.2rem + 1vw,1.9rem); line-height:1.15}
+.aula-tags{display:flex; flex-wrap:wrap; gap:8px}
+.aula-tags code{font-family:var(--font-mono); font-weight:600; font-size:.95rem; color:var(--primary-strong); background:color-mix(in srgb,var(--primary) 12%,transparent); padding:2px 10px; border-radius:8px}
+.aula-status{
+  margin-top:auto; display:inline-flex; align-items:center; gap:10px; min-height:56px; padding:8px 22px;
+  border-radius:14px; background:var(--primary); color:var(--on-primary); font-weight:800; font-size:1.15rem;
+}
+.aula-card.is-done .aula-status{background:var(--success-soft); color:var(--success)}
+.aula-card[disabled] .aula-status{background:var(--ground); color:var(--ink-soft)}
+.home-btn{display:inline-flex; align-items:center; gap:8px; min-height:52px; padding:0 18px; border-radius:999px; border:2px solid var(--line); background:var(--surface); cursor:pointer; font-weight:700}
+.home-btn:hover{border-color:var(--primary)}
+[hidden]{display:none!important}
+
+/* ============ Aula 2: títulos, lista ============ */
+.hx{margin:0; font-family:var(--font-body); font-weight:800; line-height:1.2}
+.lv1{font-size:clamp(1.8rem,1.4rem + 1.4vw,2.4rem)}
+.lv2{font-size:1.75rem}
+.lv3{font-size:1.45rem}
+.lv4{font-size:1.2rem}
+.lv5{font-size:1.02rem}
+.lv6{font-size:.88rem}
+.levels{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+@media (max-width:420px){ .levels{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.lvl{
+  min-height:92px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  border-radius:16px; border:3px solid var(--line); background:var(--surface); cursor:pointer; padding:8px;
+}
+.lvl:hover{border-color:var(--primary)}
+.lvl[aria-pressed="true"]{border-color:var(--primary); background:color-mix(in srgb,var(--primary) 14%,var(--surface))}
+.lvl-tag{font-family:var(--font-mono); font-weight:600; font-size:1.05rem; color:var(--primary)}
+.lvl-sample{font-weight:800; line-height:1.1}
+.toggles{display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px}
+.toggles .chip{min-height:60px}
+.add-row{display:flex; gap:10px; flex-wrap:wrap}
+.add-row .field{flex:1 1 220px; min-height:64px; font-size:1.4rem}
+.add-row .btn{flex:0 0 auto}
+.ulbox{border:2px dashed #9FB6CC; border-radius:10px; padding:8px 10px; display:flex; flex-direction:column; gap:6px}
+.li{display:flex; align-items:center; gap:10px; font-size:1.2rem}
+.li .dotli{width:9px; height:9px; border-radius:50%; background:var(--page-ink); flex:none}
+.el-img .content img{width:150px; height:150px; display:block}
+.quiz-wrong{border-color:var(--accent)!important; background:var(--accent-soft)!important}
+.try-msg{display:flex; gap:12px; align-items:flex-start; margin:14px 0 0; padding:14px 18px; border-radius:16px; background:var(--accent-soft); font-weight:700; font-size:1.15rem}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important; transition:none!important; scroll-behavior:auto!important}
   .confetti{display:none}
@@ -268,15 +333,25 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
     <small>Projeto Sementes do Futuro · Instituto Vida Videira</small>
     <h1>A Minha Primeira Página</h1>
   </div>
+  <button class="home-btn" id="homeBtn" type="button" hidden>
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/></svg>
+    Aulas
+  </button>
   <button class="theme-btn" id="themeBtn" type="button" aria-label="Trocar entre tema claro e escuro">
     <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     <span id="themeLabel">Tema escuro</span>
   </button>
 </header>
 
-<nav class="steps" aria-label="Passos da trilha"><ol id="dots"></ol></nav>
+<main class="home" id="home" hidden>
+  <h2 class="home-title" id="homeTitle" tabindex="-1">Escolha a aula</h2>
+  <p class="home-lead">Toque na aula que o professor pediu.</p>
+  <div class="aulas" id="aulas"></div>
+</main>
 
-<main class="wrap">
+<nav class="steps" id="stepsNav" aria-label="Passos da trilha"><ol id="dots"></ol></nav>
+
+<main class="wrap" id="trilha">
   <section class="card" aria-labelledby="stepTitle">
     <p class="kicker" id="kicker"></p>
     <h2 class="step-title" id="stepTitle" tabindex="-1"></h2>
@@ -320,7 +395,7 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
   </section>
 </main>
 
-<div class="nav">
+<div class="nav" id="navBar">
   <div class="nav-inner">
     <button class="btn btn-ghost prev" id="prevBtn" type="button">
       <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
@@ -336,10 +411,12 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 
 <script>
 /* =====================================================================
-   EXTENSÃO OPCIONAL — passo da imagem (tag img)
-   Deixe "false" até o professor apresentar a tag img para a turma.
-   Para ligar: troque para  true  e salve o arquivo.
+   CONFIGURAÇÃO DO PROFESSOR
+   AULA_2_LIBERADA: troque para  false  para esconder a Aula 2 até o dia dela.
+   HABILITAR_IMAGEM: passo extra de imagem na Aula 1. A imagem já é
+   ensinada na Aula 2, então o normal é deixar  false.
    ===================================================================== */
+const AULA_2_LIBERADA = true;
 const HABILITAR_IMAGEM = false;
 
 /* ---------- Figuras (SVG desenhadas à mão, embutidas no arquivo) ---------- */
@@ -353,12 +430,20 @@ const FIGURAS = {
   casa:{nome:'Casa', arquivo:'casa.png', alt:'Uma casa',
     svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E6F0FA'/><path d='M32 58 60 34l28 24v42H32z' fill='#F4D6A0'/><path d='M20 60 60 26l40 34' fill='none' stroke='#C8553D' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><rect x='52' y='74' width='16' height='26' rx='3' fill='#1C6EA4'/><rect x='38' y='62' width='12' height='12' rx='2' fill='#FFFFFF'/><rect x='70' y='62' width='12' height='12' rx='2' fill='#FFFFFF'/></svg>"},
   bola:{nome:'Bola', arquivo:'bola.png', alt:'Uma bola de futebol',
-    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E8F5E4'/><circle cx='60' cy='60' r='38' fill='#FFFFFF' stroke='#17293A' stroke-width='5'/><path d='M60 46l13 10-5 16H52l-5-16z' fill='#17293A'/><path d='M60 46V24M73 56l20-6M68 72l12 17M52 72 40 89M47 56l-20-6' stroke='#17293A' stroke-width='4' stroke-linecap='round'/></svg>"}
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E8F5E4'/><circle cx='60' cy='60' r='38' fill='#FFFFFF' stroke='#17293A' stroke-width='5'/><path d='M60 46l13 10-5 16H52l-5-16z' fill='#17293A'/><path d='M60 46V24M73 56l20-6M68 72l12 17M52 72 40 89M47 56l-20-6' stroke='#17293A' stroke-width='4' stroke-linecap='round'/></svg>"},
+  livro:{nome:'Livro', arquivo:'livro.png', alt:'Um livro aberto',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#EEF0FB'/><path d='M60 36c-10-7-24-9-38-7v58c14-2 28 0 38 7 10-7 24-9 38-7V29c-14-2-28 0-38 7z' fill='#FFFFFF' stroke='#1C6EA4' stroke-width='5' stroke-linejoin='round'/><path d='M60 36v58M32 44c6 0 12 1 18 3M32 56c6 0 12 1 18 3M70 47c6-2 12-3 18-3M70 59c6-2 12-3 18-3' stroke='#1C6EA4' stroke-width='4' stroke-linecap='round'/></svg>"},
+  musica:{nome:'Música', arquivo:'musica.png', alt:'Uma nota de música',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#F1EAFB'/><path d='M50 84V34l34-8v48' fill='none' stroke='#6B4FB8' stroke-width='6' stroke-linejoin='round'/><ellipse cx='41' cy='86' rx='12' ry='9' fill='#6B4FB8'/><ellipse cx='75' cy='76' rx='12' ry='9' fill='#6B4FB8'/></svg>"},
+  cafe:{nome:'Café', arquivo:'cafe.png', alt:'Uma xícara de café',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#F6EDE4'/><path d='M46 24c-4 6 4 10 0 16M60 24c-4 6 4 10 0 16' stroke='#B08A6E' stroke-width='4' stroke-linecap='round' fill='none'/><path d='M28 48h50v22a20 20 0 0 1-20 20H48a20 20 0 0 1-20-20z' fill='#FFFFFF' stroke='#7A4A2B' stroke-width='5' stroke-linejoin='round'/><path d='M78 54h6a10 10 0 0 1 0 20h-8' fill='none' stroke='#7A4A2B' stroke-width='5'/><path d='M24 98h64' stroke='#7A4A2B' stroke-width='5' stroke-linecap='round'/></svg>"}
 };
 const srcFigura = k => 'data:image/svg+xml,' + FIGURAS[k].svg.replace(/%/g,'%25').replace(/#/g,'%23').replace(/</g,'%3C').replace(/>/g,'%3E');
 
 const FRASES_1 = ['Eu moro em Fortaleza.','Eu gosto de música.','Estou aprendendo a usar o computador.'];
 const FRASES_2 = ['Eu gosto de cozinhar.','Meu sonho é aprender coisas novas.','Eu tenho orgulho da minha família.'];
+const SUBTITULOS = ['Coisas que eu gosto','O que eu gosto de fazer','Meus passatempos'];
+const ITENS = ['Música','Futebol','Cozinhar','Dançar','Ler','Novela','Praia','Família','Plantas','Viajar'];
 const TEXTO_EXEMPLO = 'Olá! Este texto está dentro do body.';
 
 /* ---------- Ícones ---------- */
@@ -368,15 +453,12 @@ const ICO = {
   out:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>',
   again:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
   star:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
-  tag:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg>'
+  tag:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg>',
+  home:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/></svg>',
+  next:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>',
+  lock:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  hint:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>'
 };
-
-/* ---------- Estado (fica salvo neste computador) ---------- */
-const CHAVE = 'sementes-basico-v1';
-const PADRAO = {passo:0, max:0, demo:false, fora:false, nome:'', frase1:'', frase2:'', figura:'', etiquetas:true};
-let state = Object.assign({}, PADRAO);
-try{ const s = JSON.parse(localStorage.getItem(CHAVE)); if(s) state = Object.assign({}, PADRAO, s); }catch(e){}
-function salvar(){ try{ localStorage.setItem(CHAVE, JSON.stringify(state)); }catch(e){} }
 
 /* ---------- Utilidades ---------- */
 const $ = id => document.getElementById(id);
@@ -395,51 +477,202 @@ function aplicarMaiuscula(input, fn){
   const pos = input.selectionStart, fim = input.selectionEnd, novo = fn(input.value);
   if(novo !== input.value){ input.value = novo; try{ input.setSelectionRange(pos, fim); }catch(e){} }
 }
+function carregar(chave, padrao){
+  try{ const s = JSON.parse(localStorage.getItem(chave)); if(s) return Object.assign({}, padrao, s); }catch(e){}
+  return JSON.parse(JSON.stringify(padrao));
+}
 
-/* ---------- Passos ---------- */
-const PASSOS = [
-  { id:'body',
-    titulo:'O body: o corpo da página',
-    texto:'Toda página tem um corpo, chamado <span class="tag-name">body</span>. Tudo o que você quer mostrar fica <b>dentro</b> dele.',
-    pronto:() => state.demo,
-    falta:'Toque no botão azul para colocar o texto.',
-    montar:montarBody },
-  { id:'h1',
-    titulo:'h1: o título',
-    texto:'O <span class="tag-name">h1</span> é o título, a letra maior. Ele fica <b>dentro</b> do body.',
-    pronto:() => state.nome.trim() !== '',
-    falta:'Escreva o seu nome na caixa branca.',
-    montar:el => montarTexto(el, {campo:'nome', rotulo:'Escreva o seu nome:', exemplo:'Ex.: Maria da Silva', maiuscula:maiusculaNome, dica:'Toque na caixa branca e escreva. O nome aparece na página na mesma hora.'}) },
-  { id:'p1',
-    titulo:'p: o texto',
-    texto:'O <span class="tag-name">p</span> é um texto normal (parágrafo). Também fica <b>dentro</b> do body, embaixo do título.',
-    pronto:() => state.frase1.trim() !== '',
-    falta:'Escreva uma frase ou toque em uma frase pronta.',
-    montar:el => montarTexto(el, {campo:'frase1', rotulo:'Escreva uma frase sobre você:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_1}) },
-  { id:'p2',
-    titulo:'Mais pedaços dentro do body',
-    texto:'Dentro do body você pode colocar <b>vários</b> pedaços, um embaixo do outro. Vamos escrever mais uma frase.',
-    pronto:() => state.frase2.trim() !== '',
-    falta:'Escreva mais uma frase ou toque em uma frase pronta.',
-    montar:el => montarTexto(el, {campo:'frase2', rotulo:'Escreva mais uma frase:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_2}) },
-  HABILITAR_IMAGEM && { id:'img',
-    titulo:'img: a imagem',
-    texto:'O <span class="tag-name">img</span> coloca uma imagem na página. Ela também fica <b>dentro</b> do body.',
-    pronto:() => !!state.figura,
-    falta:'Toque em uma figura para escolher.',
-    montar:montarImagem },
-  { id:'fim',
-    titulo:'Pronto!',
-    texto:'',
-    pronto:() => true,
-    montar:montarFim }
-].filter(Boolean);
-
+/* ---------- Estado da aula aberta (fica salvo neste computador) ---------- */
+let A = null, state = null, PASSOS = [];
+function salvar(){ if(A) try{ localStorage.setItem(A.chave, JSON.stringify(state)); }catch(e){} }
 const indice = id => PASSOS.findIndex(p => p.id === id);
 const visivel = id => { const i = indice(id); return i !== -1 && i <= state.passo; };
 const atual = () => PASSOS[state.passo];
-if(state.passo >= PASSOS.length) state.passo = PASSOS.length - 1;
-if(state.max >= PASSOS.length) state.max = PASSOS.length - 1;
+
+/* =====================================================================
+   AULA 1 — body, h1, p
+   ===================================================================== */
+const AULA1 = {
+  num:1, nome:'O corpo da página', chave:'sementes-basico-v1',
+  padrao:{passo:0, max:0, demo:false, fora:false, nome:'', frase1:'', frase2:'', figura:'', etiquetas:true},
+  tags:['body','h1','p'].concat(HABILITAR_IMAGEM ? ['img'] : []),
+  passos:[
+    { id:'body',
+      titulo:'O body: o corpo da página',
+      texto:'Toda página tem um corpo, chamado <span class="tag-name">body</span>. Tudo o que você quer mostrar fica <b>dentro</b> dele.',
+      pronto:() => state.demo,
+      falta:'Toque no botão azul para colocar o texto.',
+      montar:montarBody },
+    { id:'h1',
+      titulo:'h1: o título',
+      texto:'O <span class="tag-name">h1</span> é o título, a letra maior. Ele fica <b>dentro</b> do body.',
+      pronto:() => state.nome.trim() !== '',
+      falta:'Escreva o seu nome na caixa branca.',
+      montar:el => montarTexto(el, {campo:'nome', rotulo:'Escreva o seu nome:', exemplo:'Ex.: Maria da Silva', maiuscula:maiusculaNome, dica:'Toque na caixa branca e escreva. O nome aparece na página na mesma hora.'}) },
+    { id:'p1',
+      titulo:'p: o texto',
+      texto:'O <span class="tag-name">p</span> é um texto normal (parágrafo). Também fica <b>dentro</b> do body, embaixo do título.',
+      pronto:() => state.frase1.trim() !== '',
+      falta:'Escreva uma frase ou toque em uma frase pronta.',
+      montar:el => montarTexto(el, {campo:'frase1', rotulo:'Escreva uma frase sobre você:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_1}) },
+    { id:'p2',
+      titulo:'Mais pedaços dentro do body',
+      texto:'Dentro do body você pode colocar <b>vários</b> pedaços, um embaixo do outro. Vamos escrever mais uma frase.',
+      pronto:() => state.frase2.trim() !== '',
+      falta:'Escreva mais uma frase ou toque em uma frase pronta.',
+      montar:el => montarTexto(el, {campo:'frase2', rotulo:'Escreva mais uma frase:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_2}) },
+    HABILITAR_IMAGEM && { id:'img',
+      titulo:'img: a imagem',
+      texto:'O <span class="tag-name">img</span> coloca uma imagem na página. Ela também fica <b>dentro</b> do body.',
+      pronto:() => !!state.figura,
+      falta:'Toque em uma figura para escolher.',
+      montar:el => montarImagem(el, ['coracao','sol','flor','casa','bola']) },
+    { id:'fim', titulo:'Pronto!', texto:'', pronto:() => true, montar:montarFim }
+  ].filter(Boolean),
+  fimTexto:nome => `Parabéns${nome}! Você fez a sua primeira página. Tudo o que aparece nela está <b>dentro</b> do body.`,
+  pagina(p){
+    let html = '';
+    if(p === 'body'){
+      if(state.demo) html += elemento('p', `<p class="content">${esc(TEXTO_EXEMPLO)}</p>`, true);
+      return html;
+    }
+    if(visivel('h1')) html += state.nome.trim()
+      ? elemento('h1', `<h1 class="content">${esc(state.nome)}</h1>`, p === 'h1')
+      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'h1');
+    if(visivel('p1')) html += state.frase1.trim()
+      ? elemento('p', `<p class="content">${esc(state.frase1)}</p>`, p === 'p1')
+      : elemento('p', `<div class="content slot">A sua frase vai aparecer aqui</div>`, p === 'p1');
+    if(visivel('p2')) html += state.frase2.trim()
+      ? elemento('p', `<p class="content">${esc(state.frase2)}</p>`, p === 'p2')
+      : elemento('p', `<div class="content slot">A outra frase vai aparecer aqui</div>`, p === 'p2');
+    if(visivel('img')) html += elementoImagem(p === 'img');
+    return html;
+  },
+  fora(p){
+    return (p === 'body' && state.fora)
+      ? `<div class="outside" aria-label="Exemplo de texto fora do body"><span class="ghost">Eu estou fora do body</span><span class="why">← fora do body: não aparece na página</span></div>`
+      : '';
+  },
+  codigo(p){
+    const L = [];
+    if(p === 'body'){
+      L.push(state.demo ? {i:1, h:T('<p>') + C(TEXTO_EXEMPLO) + T('</p>'), novo:true} : {i:1, h:PH('(vazio: nada dentro ainda)')});
+      return L;
+    }
+    if(visivel('h1')) L.push({i:1, h:T('<h1>') + txt(state.nome, 'Seu nome') + T('</h1>'), novo:p === 'h1'});
+    if(visivel('p1')) L.push({i:1, h:T('<p>') + txt(state.frase1, 'Sua frase') + T('</p>'), novo:p === 'p1'});
+    if(visivel('p2')) L.push({i:1, h:T('<p>') + txt(state.frase2, 'Outra frase') + T('</p>'), novo:p === 'p2'});
+    if(visivel('img')) L.push(linhaImagem(p === 'img'));
+    return L;
+  }
+};
+
+/* =====================================================================
+   AULA 2 — h1 a h6, ul + li, img
+   ===================================================================== */
+const AULA2 = {
+  num:2, nome:'Títulos, listas e imagens', chave:'sementes-basico-aula2-v1',
+  padrao:{passo:0, max:0, nome:'', frase1:'', frase2:'', quiz:'', sub:'', nivel:2, testou:false, itens:[], figura:'', etiquetas:true},
+  tags:['h1 … h6','ul','li','img'],
+  passos:[
+    { id:'rev',
+      titulo:'Lembrando a aula 1',
+      texto:'A sua página continua aqui. Lembra? A página tem um corpo, o <span class="tag-name">body</span>.',
+      pronto:() => state.nome.trim() !== '' && state.quiz === 'ok',
+      falta:() => state.nome.trim() ? 'Toque na resposta certa.' : 'Escreva o seu nome na caixa branca.',
+      montar:montarRevisao },
+    { id:'h2',
+      titulo:'h2: o subtítulo',
+      texto:'O <span class="tag-name">h2</span> é um subtítulo. Ele é menor que o h1 e separa a página em partes.',
+      pronto:() => state.sub.trim() !== '',
+      falta:'Escreva um subtítulo ou toque em um pronto.',
+      montar:el => montarTexto(el, {campo:'sub', rotulo:'Escreva um subtítulo:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:SUBTITULOS, prontasRotulo:'Ou toque em um subtítulo pronto:'}) },
+    { id:'niveis',
+      titulo:'Do h1 ao h6',
+      texto:'Existem <b>6</b> títulos: do <span class="tag-name">h1</span> (o maior) até o <span class="tag-name">h6</span> (o menor). Toque nos botões e veja o seu subtítulo mudar.',
+      pronto:() => state.testou,
+      falta:'Toque em um dos botões de tamanho.',
+      montar:montarNiveis },
+    { id:'lista',
+      titulo:'ul e li: a lista',
+      texto:'O <span class="tag-name">ul</span> é uma lista. Cada item é um <span class="tag-name">li</span>. Os li ficam <b>dentro</b> do ul, e o ul fica <b>dentro</b> do body.',
+      pronto:() => state.itens.length > 0,
+      falta:'Toque em pelo menos uma coisa que você gosta.',
+      montar:montarLista },
+    { id:'img',
+      titulo:'img: a imagem',
+      texto:'O <span class="tag-name">img</span> coloca uma imagem na página. Ela também fica <b>dentro</b> do body.',
+      pronto:() => !!state.figura,
+      falta:'Toque em uma figura para escolher.',
+      montar:el => montarImagem(el, Object.keys(FIGURAS)) },
+    { id:'fim', titulo:'Pronto!', texto:'', pronto:() => true, montar:montarFim }
+  ],
+  fimTexto:nome => `Parabéns${nome}! A sua página agora tem subtítulo, lista e imagem. E tudo continua <b>dentro</b> do body.`,
+  preparar(){
+    // traz o nome e as frases da Aula 1, se existirem
+    if(state.nome.trim()) return;
+    const a1 = carregar(AULA1.chave, AULA1.padrao);
+    state.nome = a1.nome || ''; state.frase1 = a1.frase1 || ''; state.frase2 = a1.frase2 || '';
+  },
+  nivelAtual(){ return visivel('niveis') ? state.nivel : 2; },
+  pagina(p){
+    let html = state.nome.trim()
+      ? elemento('h1', `<div class="content hx lv1">${esc(state.nome)}</div>`, false)
+      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'rev');
+    [state.frase1, state.frase2].filter(f => f.trim()).forEach(f => { html += elemento('p', `<p class="content">${esc(f)}</p>`, false); });
+    if(visivel('h2')){
+      const n = this.nivelAtual(), novo = p === 'h2' || p === 'niveis';
+      html += state.sub.trim()
+        ? elemento('h' + n, `<div class="content hx lv${n}">${esc(state.sub)}</div>`, novo)
+        : elemento('h2', `<div class="content slot">O subtítulo vai aparecer aqui</div>`, novo);
+    }
+    if(visivel('lista')){
+      html += state.itens.length
+        ? elemento('ul', `<div class="content ulbox">${state.itens.map(t => `<div class="li"><span class="tagchip">li</span><span class="dotli" aria-hidden="true"></span><span>${esc(t)}</span></div>`).join('')}</div>`, p === 'lista')
+        : elemento('ul', `<div class="content slot">A lista vai aparecer aqui</div>`, p === 'lista');
+    }
+    if(visivel('img')) html += elementoImagem(p === 'img');
+    return html;
+  },
+  codigo(p){
+    const L = [{i:1, h:T('<h1>') + txt(state.nome, 'Seu nome') + T('</h1>')}];
+    [state.frase1, state.frase2].filter(f => f.trim()).forEach(f => L.push({i:1, h:T('<p>') + C(f) + T('</p>')}));
+    if(visivel('h2')){
+      const n = this.nivelAtual(), novo = p === 'h2' || p === 'niveis';
+      L.push({i:1, h:T(`<h${n}>`) + txt(state.sub, 'Subtítulo') + T(`</h${n}>`), novo});
+    }
+    if(visivel('lista')){
+      const novo = p === 'lista';
+      L.push({i:1, h:T('<ul>'), novo});
+      (state.itens.length ? state.itens : ['']).forEach(t => L.push({i:2, h:T('<li>') + txt(t, 'Item') + T('</li>'), novo}));
+      L.push({i:1, h:T('</ul>'), novo});
+    }
+    if(visivel('img')) L.push(linhaImagem(p === 'img'));
+    return L;
+  }
+};
+
+const AULAS = {1:AULA1, 2:AULA2};
+const liberada = n => n === 1 || (n === 2 && AULA_2_LIBERADA);
+
+/* ---------- Peças da prévia e do código ---------- */
+const T = s => `<span class="t">${esc(s)}</span>`;
+const C = s => `<span class="c">${esc(s)}</span>`;
+const PH = s => `<span class="ph">${esc(s)}</span>`;
+const txt = (v, ph) => v.trim() ? C(v) : PH(ph);
+function elemento(tag, conteudoHTML, novo){
+  const classe = /^h[1-6]$/.test(tag) ? (tag === 'h1' ? 'h1' : 'hn') : tag;
+  return `<div class="el el-${classe}${novo ? ' is-new' : ''}"><span class="tagchip">${tag}</span>${conteudoHTML}</div>`;
+}
+function elementoImagem(novo){
+  return state.figura
+    ? elemento('img', `<div class="content"><img src="${srcFigura(state.figura)}" alt="${esc(FIGURAS[state.figura].alt)}"></div>`, novo)
+    : elemento('img', `<div class="content slot">A figura vai aparecer aqui</div>`, novo);
+}
+function linhaImagem(novo){
+  const f = state.figura && FIGURAS[state.figura];
+  return {i:1, h:T('<img src="') + C(f ? f.arquivo : 'figura.png') + T('" alt="') + C(f ? f.alt : 'Uma figura') + T('">'), novo};
+}
 
 /* ---------- Montagem das interações ---------- */
 function montarBody(el){
@@ -469,7 +702,7 @@ function montarTexto(el, o){
       autocomplete="off" spellcheck="false" autocapitalize="${o.campo === 'nome' ? 'words' : 'sentences'}"
       placeholder="${esc(o.exemplo)}" value="${esc(state[o.campo])}">
     ${o.dica ? `<p class="hint">${o.dica}</p>` : ''}
-    ${o.prontas ? `<p class="or">Ou toque em uma frase pronta:</p>
+    ${o.prontas ? `<p class="or">${o.prontasRotulo || 'Ou toque em uma frase pronta:'}</p>
       <div class="stack" id="prontas">${o.prontas.map((f,i) => `
         <button class="chip" type="button" data-i="${i}" aria-pressed="${state[o.campo] === f}">
           <span class="mark">${ICO.check}</span><span>${esc(f)}</span>
@@ -488,9 +721,9 @@ function montarTexto(el, o){
   }));
 }
 
-function montarImagem(el){
+function montarImagem(el, chaves){
   el.innerHTML = `<p class="label">Toque em uma figura:</p>
-    <div class="pics">${Object.keys(FIGURAS).map(k => `
+    <div class="pics">${chaves.map(k => `
       <button class="chip pic" type="button" data-k="${k}" aria-pressed="${state.figura === k}">
         <img src="${srcFigura(k)}" alt=""><span>${FIGURAS[k].nome}</span>
       </button>`).join('')}</div>`;
@@ -500,89 +733,129 @@ function montarImagem(el){
   }));
 }
 
+function montarRevisao(el){
+  const pedirNome = el.dataset.pedirNome === '1' || !state.nome.trim();
+  el.dataset.pedirNome = pedirNome ? '1' : '';
+  el.innerHTML = `
+    ${pedirNome ? `
+      <label class="label" for="campo">Escreva o seu nome para começar:</label>
+      <input class="field" id="campo" type="text" maxlength="40" autocomplete="off" spellcheck="false" autocapitalize="words"
+        placeholder="Ex.: Maria da Silva" value="${esc(state.nome)}">
+      <p class="or">Agora, uma pergunta:</p>` : ''}
+    <p class="label">Onde fica tudo o que aparece na página?</p>
+    <div class="stack">
+      <button class="chip" type="button" data-r="ok" aria-pressed="${state.quiz === 'ok'}"><span class="mark">${ICO.check}</span><span>Dentro do body</span></button>
+      <button class="chip${state.quiz === 'nao' ? ' quiz-wrong' : ''}" type="button" data-r="nao" aria-pressed="false"><span class="mark">${ICO.check}</span><span>Fora do body</span></button>
+    </div>
+    ${state.quiz === 'ok' ? `<p class="ok-msg">${ICO.star}<span>Isso mesmo! Tudo o que aparece fica <b>dentro</b> do body. Hoje vamos colocar mais pedaços lá dentro.</span></p>` : ''}
+    ${state.quiz === 'nao' ? `<p class="try-msg">${ICO.hint}<span>Quase! Lembre da aula 1: fora do body, <b>não aparece</b>. Tente de novo.</span></p>` : ''}`;
+  const input = $('campo');
+  if(input){
+    input.addEventListener('input', () => { aplicarMaiuscula(input, maiusculaNome); state.nome = input.value; salvar(); atualizarPagina(); limparAviso(); });
+    input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); avancar(); } });
+  }
+  el.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => {
+    state.quiz = b.dataset.r; salvar(); limparAviso(); montarRevisao(el);
+    const volta = el.querySelector(`[data-r="${b.dataset.r}"]`); if(volta) volta.focus();
+  }));
+}
+
+function montarNiveis(el){
+  el.innerHTML = `
+    <p class="label">Toque em um tamanho:</p>
+    <div class="levels">${[1,2,3,4,5,6].map(n => `
+      <button class="lvl" type="button" data-n="${n}" aria-pressed="${state.testou && state.nivel === n}" aria-label="Título h${n}">
+        <span class="lvl-tag">h${n}</span><span class="lvl-sample lv${n}">Aa</span>
+      </button>`).join('')}</div>
+    ${state.testou ? `<p class="ok-msg">${ICO.hint}<span>O <b>h1</b> é o título principal: use só um. Para as partes da página, o mais comum é o <b>h2</b>. Escolha o tamanho que quiser para o seu subtítulo.</span></p>` : ''}`;
+  el.querySelectorAll('.lvl').forEach(b => b.addEventListener('click', () => {
+    state.nivel = +b.dataset.n; state.testou = true; salvar(); limparAviso(); montarNiveis(el); atualizarPagina();
+    el.querySelector(`.lvl[data-n="${b.dataset.n}"]`).focus();
+  }));
+}
+
+function montarLista(el){
+  const extras = state.itens.filter(t => !ITENS.includes(t));
+  const todos = ITENS.concat(extras);
+  el.innerHTML = `
+    <p class="label">Toque nas coisas que você gosta:</p>
+    <div class="toggles">${todos.map((t,i) => `
+      <button class="chip" type="button" data-i="${i}" aria-pressed="${state.itens.includes(t)}">
+        <span class="mark">${ICO.check}</span><span>${esc(t)}</span>
+      </button>`).join('')}</div>
+    <p class="or">Ou escreva outra coisa:</p>
+    <div class="add-row">
+      <input class="field" id="campo" type="text" maxlength="40" autocomplete="off" spellcheck="false" autocapitalize="sentences" placeholder="Escreva aqui…" aria-label="Escreva outra coisa que você gosta">
+      <button class="btn btn-primary" id="addItem" type="button">${ICO.plus} Colocar na lista</button>
+    </div>`;
+  el.querySelectorAll('.toggles .chip').forEach(b => b.addEventListener('click', () => {
+    const t = todos[b.dataset.i];
+    state.itens = state.itens.includes(t) ? state.itens.filter(x => x !== t) : state.itens.concat([t]);
+    b.setAttribute('aria-pressed', String(state.itens.includes(t)));
+    salvar(); atualizarPagina(); limparAviso();
+  }));
+  const input = $('campo');
+  const adicionar = () => {
+    const t = input.value.trim();
+    if(!t){ input.focus(); return; }
+    if(!state.itens.includes(t)) state.itens = state.itens.concat([t]);
+    salvar(); montarLista(el); atualizarPagina(); limparAviso(); $('campo').focus();
+  };
+  input.addEventListener('input', () => aplicarMaiuscula(input, maiusculaFrase));
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); adicionar(); } });
+  $('addItem').onclick = adicionar;
+}
+
 function montarFim(el){
   const nome = state.nome.trim().split(/\s+/)[0] || '';
-  const tags = ['body','h1','p'].concat(HABILITAR_IMAGEM ? ['img'] : []);
+  const proxima = AULAS[A.num + 1] && liberada(A.num + 1) ? A.num + 1 : 0;
   el.innerHTML = `
     <div class="done-hero">
       <div class="medal">${ICO.star}</div>
-      <p class="explain" style="margin:0">Parabéns${nome ? ', <b>' + esc(nome) + '</b>' : ''}! Você fez a sua primeira página. Tudo o que aparece nela está <b>dentro</b> do body.</p>
+      <p class="explain" style="margin:0">${A.fimTexto(nome ? ', <b>' + esc(nome) + '</b>' : '')}</p>
     </div>
     <p class="label" style="text-align:center;margin-top:20px">O que você aprendeu:</p>
-    <ul class="badges">${tags.map(t => `<li>${ICO.check}<code>${t}</code></li>`).join('')}</ul>
+    <ul class="badges">${A.tags.map(t => `<li>${ICO.check}<code>${esc(t)}</code></li>`).join('')}</ul>
     <div class="stack">
+      ${proxima ? `<a class="btn btn-primary btn-wide" href="#aula-${proxima}" style="text-decoration:none">Ir para a Aula ${proxima} ${ICO.next}</a>` : ''}
       <button class="btn btn-ghost btn-wide" id="etq" type="button" aria-pressed="${!state.etiquetas}">${ICO.tag} ${state.etiquetas ? 'Ver a página sem as etiquetas' : 'Mostrar as etiquetas de novo'}</button>
-      <button class="btn btn-ghost btn-wide" id="recomecar" type="button">${ICO.again} Recomeçar</button>
+      <a class="btn btn-ghost btn-wide" href="#" style="text-decoration:none">${ICO.home} Voltar para as aulas</a>
+      <button class="btn btn-ghost btn-wide" id="recomecar" type="button">${ICO.again} Recomeçar esta aula</button>
     </div>`;
   $('etq').onclick = () => { state.etiquetas = !state.etiquetas; salvar(); montarFim(el); atualizarPagina(); $('etq').focus(); };
   let confirmar = false, t;
   $('recomecar').onclick = e => {
     if(!confirmar){
       confirmar = true; e.currentTarget.innerHTML = `${ICO.again} Tem certeza? Toque de novo para apagar e recomeçar`;
-      t = setTimeout(() => { confirmar = false; const b = $('recomecar'); if(b) b.innerHTML = `${ICO.again} Recomeçar`; }, 5000);
+      t = setTimeout(() => { confirmar = false; const b = $('recomecar'); if(b) b.innerHTML = `${ICO.again} Recomeçar esta aula`; }, 5000);
       return;
     }
     clearTimeout(t);
-    state = Object.assign({}, PADRAO); salvar(); render(true);
+    state = JSON.parse(JSON.stringify(A.padrao));
+    if(A.preparar) A.preparar();
+    salvar(); render(true);
   };
 }
 
 /* ---------- Prévia (a janelinha) e código ---------- */
-function elemento(tag, conteudoHTML, novo, classe){
-  return `<div class="el el-${classe || tag}${novo ? ' is-new' : ''}"><span class="tagchip">${tag}</span>${conteudoHTML}</div>`;
-}
-
 function atualizarPagina(){
-  const p = atual().id, prev = $('preview');
-  let html = '';
-  if(p === 'body'){
-    if(state.demo) html += elemento('p', `<p class="content">${esc(TEXTO_EXEMPLO)}</p>`, true);
-  } else {
-    if(visivel('h1')) html += state.nome.trim()
-      ? elemento('h1', `<h1 class="content">${esc(state.nome)}</h1>`, p === 'h1')
-      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'h1');
-    if(visivel('p1')) html += state.frase1.trim()
-      ? elemento('p', `<p class="content">${esc(state.frase1)}</p>`, p === 'p1')
-      : elemento('p', `<div class="content slot">A sua frase vai aparecer aqui</div>`, p === 'p1');
-    if(visivel('p2')) html += state.frase2.trim()
-      ? elemento('p', `<p class="content">${esc(state.frase2)}</p>`, p === 'p2')
-      : elemento('p', `<div class="content slot">A outra frase vai aparecer aqui</div>`, p === 'p2');
-    if(visivel('img') && state.figura) html += elemento('img', `<div class="content"><img src="${srcFigura(state.figura)}" alt="${esc(FIGURAS[state.figura].alt)}"></div>`, p === 'img');
-    else if(visivel('img')) html += elemento('img', `<div class="content slot">A figura vai aparecer aqui</div>`, p === 'img');
-  }
-  prev.innerHTML = html || `<p class="empty">O body está vazio.<br>Nada aparece na página.</p>`;
+  const p = atual().id;
+  $('preview').innerHTML = A.pagina(p) || `<p class="empty">O body está vazio.<br>Nada aparece na página.</p>`;
   $('page').classList.toggle('no-tags', p === 'fim' && !state.etiquetas);
-
-  $('outside').innerHTML = (p === 'body' && state.fora)
-    ? `<div class="outside" aria-label="Exemplo de texto fora do body"><span class="ghost">Eu estou fora do body</span><span class="why">← fora do body: não aparece na página</span></div>`
-    : '';
-
+  $('outside').innerHTML = A.fora ? A.fora(p) : '';
   atualizarCodigo();
 }
 
 function atualizarCodigo(){
   const p = atual().id;
-  const T = s => `<span class="t">${esc(s)}</span>`;
-  const C = s => `<span class="c">${esc(s)}</span>`;
-  const PH = s => `<span class="ph">${esc(s)}</span>`;
-  const linhas = [{i:0, h:T('<body>')}];
-  const texto = (v, ph) => v.trim() ? C(v) : PH(ph);
-  if(p === 'body'){
-    linhas.push(state.demo ? {i:1, h:T('<p>') + C(TEXTO_EXEMPLO) + T('</p>'), novo:true} : {i:1, h:PH('(vazio: nada dentro ainda)')});
-  } else {
-    if(visivel('h1')) linhas.push({i:1, h:T('<h1>') + texto(state.nome, 'Seu nome') + T('</h1>'), novo:p === 'h1'});
-    if(visivel('p1')) linhas.push({i:1, h:T('<p>') + texto(state.frase1, 'Sua frase') + T('</p>'), novo:p === 'p1'});
-    if(visivel('p2')) linhas.push({i:1, h:T('<p>') + texto(state.frase2, 'Outra frase') + T('</p>'), novo:p === 'p2'});
-    if(visivel('img')) linhas.push({i:1, h:T('<img src="') + C(state.figura ? FIGURAS[state.figura].arquivo : 'figura.png') + T('" alt="') + C(state.figura ? FIGURAS[state.figura].alt : 'Uma figura') + T('">'), novo:p === 'img'});
-  }
-  linhas.push({i:0, h:T('</body>')});
+  const linhas = [{i:0, h:T('<body>')}].concat(A.codigo(p), [{i:0, h:T('</body>')}]);
   $('code').innerHTML = linhas.map(l => `<span class="ln${l.novo ? ' is-new' : ''}">${'  '.repeat(l.i)}${l.h}</span>`).join('');
   $('codeLegend').textContent = p === 'fim'
     ? 'Veja: tudo está entre <body> e </body>. Tudo está dentro do corpo da página.'
-    : (linhas.some(l => l.novo) ? 'A linha marcada é o pedaço que você acabou de colocar. Ela está dentro do body.' : 'O que estiver entre <body> e </body> aparece na página.');
+    : (linhas.some(l => l.novo) ? 'As linhas marcadas são o que você acabou de colocar. Elas estão dentro do body.' : 'O que estiver entre <body> e </body> aparece na página.');
 }
 
-/* ---------- Navegação ---------- */
+/* ---------- Navegação dentro da aula ---------- */
 function montarPontos(){
   $('dots').innerHTML = PASSOS.map((p,i) => {
     const cls = i === state.passo ? 'is-current' : (i <= state.max ? 'is-done' : '');
@@ -595,11 +868,12 @@ function montarPontos(){
 
 function render(focar){
   const p = atual();
-  $('kicker').textContent = p.id === 'fim' ? 'Última etapa' : `Passo ${state.passo + 1} de ${PASSOS.length}`;
+  $('kicker').textContent = p.id === 'fim' ? `Aula ${A.num} · Última etapa` : `Aula ${A.num} · Passo ${state.passo + 1} de ${PASSOS.length}`;
   $('stepTitle').textContent = p.titulo;
   $('explain').innerHTML = p.texto;
   $('explain').hidden = !p.texto;
-  p.montar($('interact'));
+  const inter = $('interact'); delete inter.dataset.pedirNome;
+  p.montar(inter);
   atualizarPagina();
   montarPontos();
   $('prevBtn').style.visibility = state.passo === 0 ? 'hidden' : 'visible';
@@ -610,7 +884,7 @@ function render(focar){
     if(p.id === 'fim') confete();
     window.scrollTo({top:0});
     const campo = $('campo');
-    (campo || $('stepTitle')).focus({preventScroll:true});
+    (campo && p.id !== 'lista' ? campo : $('stepTitle')).focus({preventScroll:true});
   }
 }
 
@@ -620,20 +894,61 @@ function irPara(i){
 }
 function avancar(){
   const p = atual();
-  if(!p.pronto()){ avisar(p.falta); return; }
+  if(!p.pronto()){ avisar(typeof p.falta === 'function' ? p.falta() : p.falta); return; }
   if(state.passo < PASSOS.length - 1){
     state.passo++; state.max = Math.max(state.max, state.passo); render(true);
   }
 }
 function avisar(msg){
   $('nudge').textContent = msg;
-  const alvo = $('campo') || $('acao') || $('interact').querySelector('.chip');
+  const alvo = $('campo') && !$('campo').value.trim() && atual().id !== 'lista' ? $('campo') : ($('acao') || $('interact').querySelector('.chip, .lvl'));
   if(alvo){ alvo.classList.remove('attention'); void alvo.offsetWidth; alvo.classList.add('attention'); }
 }
 function limparAviso(){ $('nudge').textContent = ''; }
 
 $('nextBtn').addEventListener('click', avancar);
 $('prevBtn').addEventListener('click', () => { if(state.passo > 0){ state.passo--; render(true); } });
+
+/* ---------- Início: escolher a aula ---------- */
+function mostrarInicio(focar){
+  A = null;
+  $('home').hidden = false; $('trilha').hidden = true; $('stepsNav').hidden = true; $('navBar').hidden = true; $('homeBtn').hidden = true;
+  $('aulas').innerHTML = [1,2].map(n => {
+    const a = AULAS[n], st = carregar(a.chave, a.padrao), fim = a.passos.length - 1;
+    const feita = st.max >= fim, comecou = st.max > 0 || st.passo > 0;
+    const livre = liberada(n);
+    const status = !livre ? `${ICO.lock} Em breve`
+      : feita ? `${ICO.check} Feita! Abrir de novo`
+      : comecou ? `${ICO.next} Continuar`
+      : `${ICO.next} Começar`;
+    return `<button class="aula-card${feita && livre ? ' is-done' : ''}" type="button" data-aula="${n}" ${livre ? '' : 'disabled'}>
+      <span class="aula-top"><span class="aula-num" aria-hidden="true">${n}</span>
+        <span><span class="aula-kicker">Aula ${n}</span><span class="aula-name">${a.nome}</span></span></span>
+      <span class="aula-tags">${a.tags.map(t => `<code>${esc(t)}</code>`).join('')}</span>
+      <span class="aula-status">${status}</span>
+    </button>`;
+  }).join('');
+  $('aulas').querySelectorAll('[data-aula]').forEach(b => b.addEventListener('click', () => { location.hash = 'aula-' + b.dataset.aula; }));
+  if(focar){ window.scrollTo({top:0}); $('homeTitle').focus({preventScroll:true}); }
+}
+
+function abrirAula(n){
+  A = AULAS[n]; PASSOS = A.passos;
+  state = carregar(A.chave, A.padrao);
+  if(A.preparar) A.preparar();
+  if(state.passo >= PASSOS.length) state.passo = PASSOS.length - 1;
+  if(state.max >= PASSOS.length) state.max = PASSOS.length - 1;
+  $('home').hidden = true; $('trilha').hidden = false; $('stepsNav').hidden = false; $('navBar').hidden = false; $('homeBtn').hidden = false;
+  render(true);
+}
+
+function rota(){
+  const m = location.hash.match(/^#aula-(\d+)$/);
+  const n = m ? +m[1] : 0;
+  if(AULAS[n] && liberada(n)) abrirAula(n); else mostrarInicio(true);
+}
+$('homeBtn').addEventListener('click', () => { location.hash = ''; });
+window.addEventListener('hashchange', rota);
 
 /* ---------- Confete (desligado se o computador pedir menos movimento) ---------- */
 function confete(){
@@ -667,7 +982,7 @@ function confete(){
   rotulo();
 })();
 
-render(false);
+rota();
 </script>
 </body>
 </html>
