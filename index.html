@@ -412,11 +412,12 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 <script>
 /* =====================================================================
    CONFIGURAÇÃO DO PROFESSOR
-   AULA_2_LIBERADA: troque para  false  para esconder a Aula 2 até o dia dela.
+   AULA_2_PARA_TODOS: com  false , a Aula 2 abre sozinha para cada aluno
+   quando ele termina a Aula 1. Com  true , fica aberta para todos.
    HABILITAR_IMAGEM: passo extra de imagem na Aula 1. A imagem já é
    ensinada na Aula 2, então o normal é deixar  false.
    ===================================================================== */
-const AULA_2_LIBERADA = false;
+const AULA_2_PARA_TODOS = false;
 const HABILITAR_IMAGEM = false;
 
 /* ---------- Figuras (SVG desenhadas à mão, embutidas no arquivo) ---------- */
@@ -653,7 +654,12 @@ const AULA2 = {
 };
 
 const AULAS = {1:AULA1, 2:AULA2};
-const liberada = n => n === 1 || (n === 2 && AULA_2_LIBERADA);
+// Aula 1 concluída = o aluno chegou na tela "Pronto!" (neste computador)
+function aula1Concluida(){
+  const st = A === AULA1 ? state : carregar(AULA1.chave, AULA1.padrao);
+  return st.max >= AULA1.passos.length - 1;
+}
+const liberada = n => n === 1 || (n === 2 && (AULA_2_PARA_TODOS || aula1Concluida()));
 
 /* ---------- Peças da prévia e do código ---------- */
 const T = s => `<span class="t">${esc(s)}</span>`;
@@ -917,7 +923,7 @@ function mostrarInicio(focar){
     const a = AULAS[n], st = carregar(a.chave, a.padrao), fim = a.passos.length - 1;
     const feita = st.max >= fim, comecou = st.max > 0 || st.passo > 0;
     const livre = liberada(n);
-    const status = !livre ? `${ICO.lock} Em breve`
+    const status = !livre ? `${ICO.lock} Termine a Aula 1 para abrir`
       : feita ? `${ICO.check} Feita! Abrir de novo`
       : comecou ? `${ICO.next} Continuar`
       : `${ICO.next} Começar`;
