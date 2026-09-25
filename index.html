@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Minha Primeira Página</title>
+<meta name="description" content="Trilha guiada para montar a sua primeira página, passo a passo, sem digitar código. Projeto Sementes do Futuro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens ============ */
+:root{
+  --ground:#EEF3F8; --surface:#FFFFFF; --ink:#17293A; --ink-soft:#56697C;
+  --primary:#1C6EA4; --primary-strong:#14547E; --accent:#E58A2E;
+  --success:#2E9E6B; --success-soft:#E1F4EB; --line:#D6E0EB; --ring:#3B92C9;
+  --on-primary:#FFFFFF;
+  --accent-soft:#FDF0E1;
+  --bar:#E4ECF4;
+  --shadow:0 1px 2px rgba(23,41,58,.06),0 10px 30px rgba(23,41,58,.08);
+  /* fixos (iguais nos dois temas) */
+  --code-bg:#17233B; --code-ink:#E6EDF7; --code-tag:#8FA3BF; --code-txt:#FFCF8B;
+  --page-bg:#FFFFFF; --page-ink:#17293A; --body-line:#3B92C9;
+  --font-display:"Baloo 2",system-ui,sans-serif;
+  --font-body:"Nunito",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1822; --surface:#182634; --ink:#EAF1F8; --ink-soft:#A0B2C3;
+    --primary:#56A6DA; --primary-strong:#7FC0E8; --accent:#F2A24E;
+    --success:#45C08A; --success-soft:#14342A; --line:#2A3948; --ring:#6FB6E4;
+    --on-primary:#0F1822; --accent-soft:#3A2A17; --bar:#223244;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1822; --surface:#182634; --ink:#EAF1F8; --ink-soft:#A0B2C3;
+  --primary:#56A6DA; --primary-strong:#7FC0E8; --accent:#F2A24E;
+  --success:#45C08A; --success-soft:#14342A; --line:#2A3948; --ring:#6FB6E4;
+  --on-primary:#0F1822; --accent-soft:#3A2A17; --bar:#223244;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+
+/* ============ Base ============ */
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:118.75%; -webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--font-body); font-size:1rem; line-height:1.5;
+  overflow-x:hidden;
+}
+b,strong{font-weight:800}
+button{font:inherit; color:inherit}
+:focus-visible{outline:4px solid var(--ring); outline-offset:3px; border-radius:12px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* ============ Topo ============ */
+.top{
+  max-width:1180px; margin:0 auto; padding:16px 20px 8px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.brand{flex:1 1 260px; min-width:0}
+.brand small{display:block; color:var(--ink-soft); font-weight:700; font-size:.85rem; letter-spacing:.02em}
+.brand h1{margin:0; font-family:var(--font-display); font-weight:800; font-size:clamp(1.5rem,1.1rem + 1.6vw,2.1rem); line-height:1.1; color:var(--primary-strong)}
+.theme-btn{
+  display:inline-flex; align-items:center; gap:8px; min-height:52px; padding:0 18px;
+  border-radius:999px; border:2px solid var(--line); background:var(--surface); cursor:pointer; font-weight:700;
+}
+.theme-btn:hover{border-color:var(--primary)}
+
+.steps{max-width:1180px; margin:0 auto; padding:4px 20px 12px}
+.steps ol{list-style:none; margin:0; padding:0; display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.steps li{display:flex; align-items:center; gap:10px}
+.steps li + li::before{content:""; width:22px; height:3px; border-radius:2px; background:var(--line)}
+.dot{
+  width:48px; height:48px; border-radius:50%; border:3px solid var(--line); background:var(--surface);
+  font-family:var(--font-display); font-weight:800; font-size:1.25rem; color:var(--ink-soft);
+  display:grid; place-items:center; cursor:pointer; padding:0;
+}
+.dot[disabled]{cursor:default; opacity:.7}
+.dot.is-done{background:var(--success); border-color:var(--success); color:#fff}
+.dot.is-current{background:var(--primary); border-color:var(--primary); color:var(--on-primary); box-shadow:0 0 0 5px color-mix(in srgb,var(--primary) 25%,transparent)}
+
+/* ============ Layout ============ */
+.wrap{
+  max-width:1180px; margin:0 auto; padding:8px 20px 150px;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:28px; align-items:start;
+}
+@media (max-width:880px){ .wrap{grid-template-columns:minmax(0,1fr); gap:22px} }
+@media (max-width:480px){
+  .wrap,.top,.steps{padding-left:16px; padding-right:16px}
+  .steps ol,.steps li{gap:6px}
+  .steps li + li::before{width:10px}
+  .dot{width:44px; height:44px; font-size:1.1rem}
+  .code{font-size:.9rem}
+  .code .ln{padding:0 14px}
+}
+
+.card{background:var(--surface); border:2px solid var(--line); border-radius:22px; padding:clamp(20px,3vw,32px); box-shadow:var(--shadow)}
+.kicker{margin:0 0 4px; color:var(--accent); font-weight:800; font-size:.95rem; text-transform:uppercase; letter-spacing:.06em}
+.step-title{margin:0 0 12px; font-family:var(--font-display); font-weight:800; font-size:clamp(1.9rem,1.3rem + 2.4vw,2.8rem); line-height:1.1}
+.step-title:focus{outline:none}
+.tag-name{font-family:var(--font-mono); font-weight:600; color:var(--primary); background:color-mix(in srgb,var(--primary) 12%,transparent); padding:0 .3em; border-radius:8px}
+.explain{margin:0 0 24px; font-size:clamp(1.25rem,1.1rem + .6vw,1.5rem); line-height:1.5}
+
+/* ============ Botões ============ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  min-height:64px; padding:10px 26px; border-radius:16px; border:3px solid transparent;
+  font-weight:800; font-size:1.2rem; cursor:pointer; text-align:center; line-height:1.25;
+  transition:transform .12s ease, background-color .15s ease;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--primary); color:var(--on-primary)}
+.btn-primary:hover{background:var(--primary-strong)}
+.btn-ghost{background:var(--surface); color:var(--ink); border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--primary)}
+.btn-success{background:var(--success-soft); color:var(--success); border-color:var(--success); cursor:default}
+.btn-wide{width:100%}
+.stack{display:flex; flex-direction:column; gap:14px}
+
+/* ============ Campo de texto ============ */
+.label{display:block; font-weight:800; font-size:1.25rem; margin:0 0 10px}
+.field{
+  width:100%; min-height:76px; padding:10px 20px; border-radius:16px;
+  border:3px solid var(--line); background:var(--surface); color:var(--ink);
+  font-family:var(--font-body); font-weight:700; font-size:clamp(1.5rem,1.3rem + .8vw,2rem);
+}
+.field::placeholder{color:var(--ink-soft); opacity:.7; font-weight:600}
+.field:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 5px color-mix(in srgb,var(--ring) 35%,transparent)}
+.hint{margin:10px 0 0; color:var(--ink-soft); font-size:1.05rem}
+.or{display:flex; align-items:center; gap:12px; margin:26px 0 12px; font-weight:800; font-size:1.15rem}
+.or::after{content:""; flex:1; height:2px; background:var(--line)}
+
+.chip{
+  display:flex; align-items:center; gap:14px; width:100%; min-height:64px; padding:12px 18px;
+  border-radius:16px; border:3px solid var(--line); background:var(--surface);
+  font-weight:700; font-size:1.2rem; text-align:left; cursor:pointer;
+}
+.chip:hover{border-color:var(--primary)}
+.chip .mark{width:30px; height:30px; border-radius:50%; border:3px solid var(--line); flex:none; display:grid; place-items:center}
+.chip[aria-pressed="true"]{border-color:var(--success); background:var(--success-soft)}
+.chip[aria-pressed="true"] .mark{background:var(--success); border-color:var(--success); color:#fff}
+.chip .mark svg{width:18px; height:18px; stroke-width:3.4; visibility:hidden}
+.chip[aria-pressed="true"] .mark svg{visibility:visible}
+
+.pics{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px}
+.pic{flex-direction:column; justify-content:center; text-align:center; padding:12px; gap:8px}
+.pic img{width:72px; height:72px}
+
+.ok-msg{
+  display:flex; gap:12px; align-items:flex-start; margin:18px 0 0; padding:14px 18px; border-radius:16px;
+  background:var(--success-soft); color:var(--ink); font-weight:700; font-size:1.15rem;
+}
+.ok-msg svg{color:var(--success); margin-top:3px}
+
+/* ============ Janelinha do navegador ============ */
+.browser{background:var(--surface); border:2px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:var(--shadow)}
+.browser-bar{display:flex; align-items:center; gap:14px; padding:12px 16px; background:var(--bar); border-bottom:2px solid var(--line)}
+.lights{display:flex; gap:7px; flex:none}
+.lights span{width:13px; height:13px; border-radius:50%}
+.lights span:nth-child(1){background:#FF5F57}.lights span:nth-child(2){background:#FEBC2E}.lights span:nth-child(3){background:#28C840}
+.address{flex:1; min-width:0; background:var(--surface); border-radius:999px; padding:6px 16px; color:var(--ink-soft); font-weight:700; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.page{background:var(--page-bg); color:var(--page-ink); padding:18px}
+.bodybox{
+  position:relative; min-height:260px; border:3px dashed var(--body-line); border-radius:14px;
+  padding:48px 18px 20px; display:flex; flex-direction:column; gap:14px;
+  transition:background-color .3s ease;
+}
+.bodybox.flash{background:#EAF4FB}
+.bodybox-label{
+  position:absolute; top:0; left:14px; background:var(--body-line); color:#fff;
+  font-family:var(--font-mono); font-weight:600; font-size:.85rem; padding:3px 12px; border-radius:0 0 10px 10px;
+}
+.empty{margin:auto; color:#7D8FA1; font-weight:700; font-size:1.1rem; text-align:center}
+.el{display:flex; align-items:flex-start; gap:12px; border-radius:10px; padding:4px 6px; animation:pop .45s ease both}
+.el > .content{flex:1; min-width:0; overflow-wrap:anywhere}
+.el .tagchip{
+  flex:none; margin-top:.3em; font-family:var(--font-mono); font-size:.75rem; font-weight:600;
+  color:#14547E; background:#DDEBF6; border-radius:8px; padding:2px 8px;
+}
+.no-tags .tagchip{display:none}
+.el.is-new{background:#FFF1DE; box-shadow:0 0 0 2px #E58A2E}
+.el-h1 .content{margin:0; font-family:var(--font-body); font-weight:800; font-size:clamp(1.8rem,1.4rem + 1.4vw,2.4rem); line-height:1.15}
+.el-p .content{margin:0; font-size:1.2rem; line-height:1.5}
+.el-img img{width:150px; height:150px; display:block}
+.slot{border:2px dashed #B7C6D6; border-radius:10px; padding:12px 14px; color:#7D8FA1; font-style:italic; font-weight:700}
+@keyframes pop{from{opacity:0; transform:translateY(-10px) scale(.98)} to{opacity:1; transform:none}}
+
+.outside{
+  margin:16px 0 0; padding:14px 18px; border:3px dashed var(--line); border-radius:14px;
+  display:flex; gap:14px; align-items:center; flex-wrap:wrap; animation:pop .45s ease both;
+}
+.outside .ghost{opacity:.4; text-decoration:line-through; font-size:1.15rem; font-weight:700}
+.outside .why{font-weight:800; color:var(--accent)}
+
+.stage{display:flex; flex-direction:column; gap:18px}
+.stage-caption{margin:0; color:var(--ink-soft); font-weight:700; font-size:1rem; display:flex; align-items:center; gap:8px}
+
+/* ============ Ver o código ============ */
+.peek{border:2px solid var(--line); border-radius:18px; background:var(--surface); overflow:hidden}
+.peek summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:12px; min-height:64px; padding:10px 20px;
+  font-weight:800; font-size:1.15rem;
+}
+.peek summary::-webkit-details-marker{display:none}
+.peek summary small{color:var(--ink-soft); font-weight:700; font-size:.95rem}
+.peek summary .chev{margin-left:auto; transition:transform .2s ease}
+.peek[open] summary .chev{transform:rotate(180deg)}
+.peek .peek-body{padding:0 20px 20px}
+.peek .note{margin:0 0 12px; padding:10px 14px; border-radius:12px; background:var(--accent-soft); font-weight:700}
+.code{
+  margin:0; background:var(--code-bg); color:var(--code-ink); border-radius:14px; padding:18px 0;
+  font-family:var(--font-mono); font-size:1.05rem; line-height:1.7; overflow-x:auto;
+}
+.code .ln{display:block; padding:0 20px; white-space:pre; border-left:4px solid transparent}
+.code .ln.is-new{background:rgba(255,207,139,.14); border-left-color:#FFCF8B}
+.code .t{color:var(--code-tag)}
+.code .c{color:var(--code-txt)}
+.code .ph{color:#8FA3BF; font-style:italic}
+.code-legend{margin:10px 0 0; color:var(--ink-soft); font-size:.95rem}
+
+/* ============ Final ============ */
+.done-hero{text-align:center; padding:6px 0 4px}
+.done-hero .medal{width:92px; height:92px; margin:0 auto 8px; border-radius:50%; background:var(--success-soft); color:var(--success); display:grid; place-items:center}
+.done-hero .medal svg{width:52px; height:52px; stroke-width:3}
+.badges{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:18px 0 24px; padding:0; list-style:none}
+.badges li{display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px; background:var(--success-soft); color:var(--ink); font-weight:800}
+.badges code{font-family:var(--font-mono); font-size:1.1rem; color:var(--success)}
+.confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:5}
+.confetti i{position:absolute; top:-20px; width:12px; height:18px; border-radius:3px; animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+/* ============ Barra de navegação ============ */
+.nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:4;
+  background:color-mix(in srgb,var(--surface) 94%,transparent); border-top:2px solid var(--line);
+  backdrop-filter:blur(6px);
+}
+.nav-inner{max-width:1180px; margin:0 auto; padding:12px 20px; display:flex; gap:14px; align-items:center}
+.nav .btn{min-height:68px; font-size:1.3rem; padding:10px 30px}
+.nav .next{margin-left:auto}
+.nudge{flex:1; min-width:0; text-align:center; font-weight:800; color:var(--accent); font-size:1.1rem}
+@media (max-width:620px){
+  .nav-inner{flex-wrap:wrap; padding:10px 16px}
+  .nudge{order:-1; flex-basis:100%}
+  .nudge:empty{display:none}
+  .nav .btn{flex:1; padding:10px 14px}
+}
+.attention{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 0%,transparent)}50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 45%,transparent)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important; scroll-behavior:auto!important}
+  .confetti{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <small>Projeto Sementes do Futuro · Instituto Vida Videira</small>
+    <h1>A Minha Primeira Página</h1>
+  </div>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Trocar entre tema claro e escuro">
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <span id="themeLabel">Tema escuro</span>
+  </button>
+</header>
+
+<nav class="steps" aria-label="Passos da trilha"><ol id="dots"></ol></nav>
+
+<main class="wrap">
+  <section class="card" aria-labelledby="stepTitle">
+    <p class="kicker" id="kicker"></p>
+    <h2 class="step-title" id="stepTitle" tabindex="-1"></h2>
+    <p class="explain" id="explain"></p>
+    <div id="interact"></div>
+  </section>
+
+  <section class="stage" aria-label="A sua página">
+    <p class="stage-caption">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+      Assim está ficando a sua página:
+    </p>
+    <div>
+      <div class="browser">
+        <div class="browser-bar" aria-hidden="true">
+          <div class="lights"><span></span><span></span><span></span></div>
+          <div class="address">a sua página</div>
+        </div>
+        <div class="page" id="page">
+          <div class="bodybox" id="bodybox">
+            <span class="bodybox-label">body</span>
+            <div id="preview" style="display:contents"></div>
+          </div>
+        </div>
+      </div>
+      <div id="outside"></div>
+    </div>
+
+    <details class="peek" id="peek">
+      <summary>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Ver o código <small>(só para espiar)</small></span>
+        <svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="peek-body">
+        <p class="note">É só olhar. Você <b>não precisa digitar</b> isto.</p>
+        <pre class="code" id="code" aria-label="Código da sua página"></pre>
+        <p class="code-legend" id="codeLegend"></p>
+      </div>
+    </details>
+  </section>
+</main>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="btn btn-ghost prev" id="prevBtn" type="button">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Voltar
+    </button>
+    <p class="nudge" id="nudge" role="status" aria-live="polite"></p>
+    <button class="btn btn-primary next" id="nextBtn" type="button">
+      Próximo
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   EXTENSÃO OPCIONAL — passo da imagem (tag img)
+   Deixe "false" até o professor apresentar a tag img para a turma.
+   Para ligar: troque para  true  e salve o arquivo.
+   ===================================================================== */
+const HABILITAR_IMAGEM = false;
+
+/* ---------- Figuras (SVG desenhadas à mão, embutidas no arquivo) ---------- */
+const FIGURAS = {
+  coracao:{nome:'Coração', arquivo:'coracao.png', alt:'Um coração',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#FDE8EC'/><path d='M60 96C20 70 14 48 26 34c12-14 28-8 34 6 6-14 22-20 34-6 12 14 6 36-34 62z' fill='#E0475F'/></svg>"},
+  sol:{nome:'Sol', arquivo:'sol.png', alt:'Um sol',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#FFF3D6'/><path d='M60 14v12M60 94v12M14 60h12M94 60h12M28 28l8 8M84 84l8 8M28 92l8-8M84 36l8-8' stroke='#F2A516' stroke-width='7' stroke-linecap='round'/><circle cx='60' cy='60' r='22' fill='#F7B928'/></svg>"},
+  flor:{nome:'Flor', arquivo:'flor.png', alt:'Uma flor',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E9F6EC'/><path d='M60 64v42' stroke='#3A9A5B' stroke-width='6' stroke-linecap='round'/><path d='M60 94c-14-2-22-10-24-20 12 0 20 6 24 20z' fill='#4CB06E'/><g fill='#F28DB2'><circle cx='60' cy='32' r='14'/><circle cx='79' cy='46' r='14'/><circle cx='72' cy='68' r='14'/><circle cx='48' cy='68' r='14'/><circle cx='41' cy='46' r='14'/></g><circle cx='60' cy='52' r='11' fill='#F7C02B'/></svg>"},
+  casa:{nome:'Casa', arquivo:'casa.png', alt:'Uma casa',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E6F0FA'/><path d='M32 58 60 34l28 24v42H32z' fill='#F4D6A0'/><path d='M20 60 60 26l40 34' fill='none' stroke='#C8553D' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/><rect x='52' y='74' width='16' height='26' rx='3' fill='#1C6EA4'/><rect x='38' y='62' width='12' height='12' rx='2' fill='#FFFFFF'/><rect x='70' y='62' width='12' height='12' rx='2' fill='#FFFFFF'/></svg>"},
+  bola:{nome:'Bola', arquivo:'bola.png', alt:'Uma bola de futebol',
+    svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect width='120' height='120' rx='22' fill='#E8F5E4'/><circle cx='60' cy='60' r='38' fill='#FFFFFF' stroke='#17293A' stroke-width='5'/><path d='M60 46l13 10-5 16H52l-5-16z' fill='#17293A'/><path d='M60 46V24M73 56l20-6M68 72l12 17M52 72 40 89M47 56l-20-6' stroke='#17293A' stroke-width='4' stroke-linecap='round'/></svg>"}
+};
+const srcFigura = k => 'data:image/svg+xml,' + FIGURAS[k].svg.replace(/%/g,'%25').replace(/#/g,'%23').replace(/</g,'%3C').replace(/>/g,'%3E');
+
+const FRASES_1 = ['Eu moro em Fortaleza.','Eu gosto de música.','Estou aprendendo a usar o computador.'];
+const FRASES_2 = ['Eu gosto de cozinhar.','Meu sonho é aprender coisas novas.','Eu tenho orgulho da minha família.'];
+const TEXTO_EXEMPLO = 'Olá! Este texto está dentro do body.';
+
+/* ---------- Ícones ---------- */
+const ICO = {
+  check:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  plus:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  out:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+  again:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+  star:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
+  tag:'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></svg>'
+};
+
+/* ---------- Estado (fica salvo neste computador) ---------- */
+const CHAVE = 'sementes-basico-v1';
+const PADRAO = {passo:0, max:0, demo:false, fora:false, nome:'', frase1:'', frase2:'', figura:'', etiquetas:true};
+let state = Object.assign({}, PADRAO);
+try{ const s = JSON.parse(localStorage.getItem(CHAVE)); if(s) state = Object.assign({}, PADRAO, s); }catch(e){}
+function salvar(){ try{ localStorage.setItem(CHAVE, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- Utilidades ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const MINUSCULAS = new Set(['de','da','do','das','dos','e']);
+function maiusculaNome(v){
+  let n = 0;
+  return v.replace(/\S+/g, w => {
+    const primeira = n++ === 0;
+    if(!primeira && MINUSCULAS.has(w.toLowerCase())) return w.toLowerCase();
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  });
+}
+function maiusculaFrase(v){ return v.replace(/^(\s*)(\S)/, (m,a,b) => a + b.toUpperCase()); }
+function aplicarMaiuscula(input, fn){
+  const pos = input.selectionStart, fim = input.selectionEnd, novo = fn(input.value);
+  if(novo !== input.value){ input.value = novo; try{ input.setSelectionRange(pos, fim); }catch(e){} }
+}
+
+/* ---------- Passos ---------- */
+const PASSOS = [
+  { id:'body',
+    titulo:'O body: o corpo da página',
+    texto:'Toda página tem um corpo, chamado <span class="tag-name">body</span>. Tudo o que você quer mostrar fica <b>dentro</b> dele.',
+    pronto:() => state.demo,
+    falta:'Toque no botão azul para colocar o texto.',
+    montar:montarBody },
+  { id:'h1',
+    titulo:'h1: o título',
+    texto:'O <span class="tag-name">h1</span> é o título, a letra maior. Ele fica <b>dentro</b> do body.',
+    pronto:() => state.nome.trim() !== '',
+    falta:'Escreva o seu nome na caixa branca.',
+    montar:el => montarTexto(el, {campo:'nome', rotulo:'Escreva o seu nome:', exemplo:'Ex.: Maria da Silva', maiuscula:maiusculaNome, dica:'Toque na caixa branca e escreva. O nome aparece na página na mesma hora.'}) },
+  { id:'p1',
+    titulo:'p: o texto',
+    texto:'O <span class="tag-name">p</span> é um texto normal (parágrafo). Também fica <b>dentro</b> do body, embaixo do título.',
+    pronto:() => state.frase1.trim() !== '',
+    falta:'Escreva uma frase ou toque em uma frase pronta.',
+    montar:el => montarTexto(el, {campo:'frase1', rotulo:'Escreva uma frase sobre você:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_1}) },
+  { id:'p2',
+    titulo:'Mais pedaços dentro do body',
+    texto:'Dentro do body você pode colocar <b>vários</b> pedaços, um embaixo do outro. Vamos escrever mais uma frase.',
+    pronto:() => state.frase2.trim() !== '',
+    falta:'Escreva mais uma frase ou toque em uma frase pronta.',
+    montar:el => montarTexto(el, {campo:'frase2', rotulo:'Escreva mais uma frase:', exemplo:'Escreva aqui…', maiuscula:maiusculaFrase, prontas:FRASES_2}) },
+  HABILITAR_IMAGEM && { id:'img',
+    titulo:'img: a imagem',
+    texto:'O <span class="tag-name">img</span> coloca uma imagem na página. Ela também fica <b>dentro</b> do body.',
+    pronto:() => !!state.figura,
+    falta:'Toque em uma figura para escolher.',
+    montar:montarImagem },
+  { id:'fim',
+    titulo:'Pronto!',
+    texto:'',
+    pronto:() => true,
+    montar:montarFim }
+].filter(Boolean);
+
+const indice = id => PASSOS.findIndex(p => p.id === id);
+const visivel = id => { const i = indice(id); return i !== -1 && i <= state.passo; };
+const atual = () => PASSOS[state.passo];
+if(state.passo >= PASSOS.length) state.passo = PASSOS.length - 1;
+if(state.max >= PASSOS.length) state.max = PASSOS.length - 1;
+
+/* ---------- Montagem das interações ---------- */
+function montarBody(el){
+  if(!state.demo){
+    el.innerHTML = `<button class="btn btn-primary btn-wide" id="acao" type="button">${ICO.plus} Colocar um texto dentro do body</button>`;
+    $('acao').onclick = () => {
+      state.demo = true; salvar(); montarBody(el); atualizarPagina(); limparAviso();
+      const bx = $('bodybox'); bx.classList.add('flash'); setTimeout(() => bx.classList.remove('flash'), 700);
+    };
+    return;
+  }
+  el.innerHTML = `
+    <div class="stack">
+      <button class="btn btn-success btn-wide" type="button" aria-disabled="true">${ICO.check} O texto entrou no body!</button>
+      ${state.fora ? '' : `<button class="btn btn-ghost btn-wide" id="fora" type="button">${ICO.out} E se o texto ficar fora do body?</button>`}
+    </div>
+    ${state.fora ? `<p class="ok-msg">${ICO.check}<span>Viu? O que fica <b>fora</b> do body não aparece na página. Só aparece o que está <b>dentro</b>.</span></p>` : ''}
+    <p class="ok-msg">${ICO.star}<span>Muito bem! Agora vamos montar a <b>sua</b> página. Toque em <b>Próximo</b>.</span></p>`;
+  const f = $('fora');
+  if(f) f.onclick = () => { state.fora = true; salvar(); montarBody(el); atualizarPagina(); };
+}
+
+function montarTexto(el, o){
+  el.innerHTML = `
+    <label class="label" for="campo">${o.rotulo}</label>
+    <input class="field" id="campo" type="text" maxlength="${o.campo === 'nome' ? 40 : 90}"
+      autocomplete="off" spellcheck="false" autocapitalize="${o.campo === 'nome' ? 'words' : 'sentences'}"
+      placeholder="${esc(o.exemplo)}" value="${esc(state[o.campo])}">
+    ${o.dica ? `<p class="hint">${o.dica}</p>` : ''}
+    ${o.prontas ? `<p class="or">Ou toque em uma frase pronta:</p>
+      <div class="stack" id="prontas">${o.prontas.map((f,i) => `
+        <button class="chip" type="button" data-i="${i}" aria-pressed="${state[o.campo] === f}">
+          <span class="mark">${ICO.check}</span><span>${esc(f)}</span>
+        </button>`).join('')}</div>` : ''}`;
+  const input = $('campo');
+  const marcar = () => el.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', String(o.prontas[b.dataset.i] === state[o.campo])));
+  input.addEventListener('input', () => {
+    aplicarMaiuscula(input, o.maiuscula);
+    state[o.campo] = input.value; salvar(); atualizarPagina(); limparAviso();
+    if(o.prontas) marcar();
+  });
+  input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); avancar(); } });
+  el.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+    state[o.campo] = o.prontas[b.dataset.i]; input.value = state[o.campo];
+    salvar(); atualizarPagina(); limparAviso(); marcar();
+  }));
+}
+
+function montarImagem(el){
+  el.innerHTML = `<p class="label">Toque em uma figura:</p>
+    <div class="pics">${Object.keys(FIGURAS).map(k => `
+      <button class="chip pic" type="button" data-k="${k}" aria-pressed="${state.figura === k}">
+        <img src="${srcFigura(k)}" alt=""><span>${FIGURAS[k].nome}</span>
+      </button>`).join('')}</div>`;
+  el.querySelectorAll('.pic').forEach(b => b.addEventListener('click', () => {
+    state.figura = b.dataset.k; salvar(); atualizarPagina(); limparAviso();
+    el.querySelectorAll('.pic').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.k === state.figura)));
+  }));
+}
+
+function montarFim(el){
+  const nome = state.nome.trim().split(/\s+/)[0] || '';
+  const tags = ['body','h1','p'].concat(HABILITAR_IMAGEM ? ['img'] : []);
+  el.innerHTML = `
+    <div class="done-hero">
+      <div class="medal">${ICO.star}</div>
+      <p class="explain" style="margin:0">Parabéns${nome ? ', <b>' + esc(nome) + '</b>' : ''}! Você fez a sua primeira página. Tudo o que aparece nela está <b>dentro</b> do body.</p>
+    </div>
+    <p class="label" style="text-align:center;margin-top:20px">O que você aprendeu:</p>
+    <ul class="badges">${tags.map(t => `<li>${ICO.check}<code>${t}</code></li>`).join('')}</ul>
+    <div class="stack">
+      <button class="btn btn-ghost btn-wide" id="etq" type="button" aria-pressed="${!state.etiquetas}">${ICO.tag} ${state.etiquetas ? 'Ver a página sem as etiquetas' : 'Mostrar as etiquetas de novo'}</button>
+      <button class="btn btn-ghost btn-wide" id="recomecar" type="button">${ICO.again} Recomeçar</button>
+    </div>`;
+  $('etq').onclick = () => { state.etiquetas = !state.etiquetas; salvar(); montarFim(el); atualizarPagina(); $('etq').focus(); };
+  let confirmar = false, t;
+  $('recomecar').onclick = e => {
+    if(!confirmar){
+      confirmar = true; e.currentTarget.innerHTML = `${ICO.again} Tem certeza? Toque de novo para apagar e recomeçar`;
+      t = setTimeout(() => { confirmar = false; const b = $('recomecar'); if(b) b.innerHTML = `${ICO.again} Recomeçar`; }, 5000);
+      return;
+    }
+    clearTimeout(t);
+    state = Object.assign({}, PADRAO); salvar(); render(true);
+  };
+}
+
+/* ---------- Prévia (a janelinha) e código ---------- */
+function elemento(tag, conteudoHTML, novo, classe){
+  return `<div class="el el-${classe || tag}${novo ? ' is-new' : ''}"><span class="tagchip">${tag}</span>${conteudoHTML}</div>`;
+}
+
+function atualizarPagina(){
+  const p = atual().id, prev = $('preview');
+  let html = '';
+  if(p === 'body'){
+    if(state.demo) html += elemento('p', `<p class="content">${esc(TEXTO_EXEMPLO)}</p>`, true);
+  } else {
+    if(visivel('h1')) html += state.nome.trim()
+      ? elemento('h1', `<h1 class="content">${esc(state.nome)}</h1>`, p === 'h1')
+      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'h1');
+    if(visivel('p1')) html += state.frase1.trim()
+      ? elemento('p', `<p class="content">${esc(state.frase1)}</p>`, p === 'p1')
+      : elemento('p', `<div class="content slot">A sua frase vai aparecer aqui</div>`, p === 'p1');
+    if(visivel('p2')) html += state.frase2.trim()
+      ? elemento('p', `<p class="content">${esc(state.frase2)}</p>`, p === 'p2')
+      : elemento('p', `<div class="content slot">A outra frase vai aparecer aqui</div>`, p === 'p2');
+    if(visivel('img') && state.figura) html += elemento('img', `<div class="content"><img src="${srcFigura(state.figura)}" alt="${esc(FIGURAS[state.figura].alt)}"></div>`, p === 'img');
+    else if(visivel('img')) html += elemento('img', `<div class="content slot">A figura vai aparecer aqui</div>`, p === 'img');
+  }
+  prev.innerHTML = html || `<p class="empty">O body está vazio.<br>Nada aparece na página.</p>`;
+  $('page').classList.toggle('no-tags', p === 'fim' && !state.etiquetas);
+
+  $('outside').innerHTML = (p === 'body' && state.fora)
+    ? `<div class="outside" aria-label="Exemplo de texto fora do body"><span class="ghost">Eu estou fora do body</span><span class="why">← fora do body: não aparece na página</span></div>`
+    : '';
+
+  atualizarCodigo();
+}
+
+function atualizarCodigo(){
+  const p = atual().id;
+  const T = s => `<span class="t">${esc(s)}</span>`;
+  const C = s => `<span class="c">${esc(s)}</span>`;
+  const PH = s => `<span class="ph">${esc(s)}</span>`;
+  const linhas = [{i:0, h:T('<body>')}];
+  const texto = (v, ph) => v.trim() ? C(v) : PH(ph);
+  if(p === 'body'){
+    linhas.push(state.demo ? {i:1, h:T('<p>') + C(TEXTO_EXEMPLO) + T('</p>'), novo:true} : {i:1, h:PH('(vazio: nada dentro ainda)')});
+  } else {
+    if(visivel('h1')) linhas.push({i:1, h:T('<h1>') + texto(state.nome, 'Seu nome') + T('</h1>'), novo:p === 'h1'});
+    if(visivel('p1')) linhas.push({i:1, h:T('<p>') + texto(state.frase1, 'Sua frase') + T('</p>'), novo:p === 'p1'});
+    if(visivel('p2')) linhas.push({i:1, h:T('<p>') + texto(state.frase2, 'Outra frase') + T('</p>'), novo:p === 'p2'});
+    if(visivel('img')) linhas.push({i:1, h:T('<img src="') + C(state.figura ? FIGURAS[state.figura].arquivo : 'figura.png') + T('" alt="') + C(state.figura ? FIGURAS[state.figura].alt : 'Uma figura') + T('">'), novo:p === 'img'});
+  }
+  linhas.push({i:0, h:T('</body>')});
+  $('code').innerHTML = linhas.map(l => `<span class="ln${l.novo ? ' is-new' : ''}">${'  '.repeat(l.i)}${l.h}</span>`).join('');
+  $('codeLegend').textContent = p === 'fim'
+    ? 'Veja: tudo está entre <body> e </body>. Tudo está dentro do corpo da página.'
+    : (linhas.some(l => l.novo) ? 'A linha marcada é o pedaço que você acabou de colocar. Ela está dentro do body.' : 'O que estiver entre <body> e </body> aparece na página.');
+}
+
+/* ---------- Navegação ---------- */
+function montarPontos(){
+  $('dots').innerHTML = PASSOS.map((p,i) => {
+    const cls = i === state.passo ? 'is-current' : (i <= state.max ? 'is-done' : '');
+    const nome = p.id === 'fim' ? 'Pronto' : p.titulo;
+    return `<li><button class="dot ${cls}" type="button" data-i="${i}" ${i > state.max ? 'disabled' : ''}
+      aria-label="Passo ${i + 1}: ${esc(nome)}${i === state.passo ? ' (você está aqui)' : ''}" ${i === state.passo ? 'aria-current="step"' : ''}>${i + 1}</button></li>`;
+  }).join('');
+  $('dots').querySelectorAll('.dot').forEach(b => b.addEventListener('click', () => irPara(+b.dataset.i)));
+}
+
+function render(focar){
+  const p = atual();
+  $('kicker').textContent = p.id === 'fim' ? 'Última etapa' : `Passo ${state.passo + 1} de ${PASSOS.length}`;
+  $('stepTitle').textContent = p.titulo;
+  $('explain').innerHTML = p.texto;
+  $('explain').hidden = !p.texto;
+  p.montar($('interact'));
+  atualizarPagina();
+  montarPontos();
+  $('prevBtn').style.visibility = state.passo === 0 ? 'hidden' : 'visible';
+  $('nextBtn').style.display = p.id === 'fim' ? 'none' : '';
+  limparAviso();
+  salvar();
+  if(focar){
+    if(p.id === 'fim') confete();
+    window.scrollTo({top:0});
+    const campo = $('campo');
+    (campo || $('stepTitle')).focus({preventScroll:true});
+  }
+}
+
+function irPara(i){
+  if(i < 0 || i >= PASSOS.length || i > state.max) return;
+  state.passo = i; render(true);
+}
+function avancar(){
+  const p = atual();
+  if(!p.pronto()){ avisar(p.falta); return; }
+  if(state.passo < PASSOS.length - 1){
+    state.passo++; state.max = Math.max(state.max, state.passo); render(true);
+  }
+}
+function avisar(msg){
+  $('nudge').textContent = msg;
+  const alvo = $('campo') || $('acao') || $('interact').querySelector('.chip');
+  if(alvo){ alvo.classList.remove('attention'); void alvo.offsetWidth; alvo.classList.add('attention'); }
+}
+function limparAviso(){ $('nudge').textContent = ''; }
+
+$('nextBtn').addEventListener('click', avancar);
+$('prevBtn').addEventListener('click', () => { if(state.passo > 0){ state.passo--; render(true); } });
+
+/* ---------- Confete (desligado se o computador pedir menos movimento) ---------- */
+function confete(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden','true');
+  const cores = ['#1C6EA4','#E58A2E','#2E9E6B','#F7B928','#E0475F','#56A6DA'];
+  for(let i = 0; i < 70; i++){
+    const c = document.createElement('i');
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = cores[i % cores.length];
+    c.style.animationDuration = 2.2 + Math.random() * 2 + 's';
+    c.style.animationDelay = Math.random() * .6 + 's';
+    box.appendChild(c);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 5200);
+}
+
+/* ---------- Tema claro / escuro ---------- */
+(function(){
+  const root = document.documentElement;
+  const escuroSistema = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const efetivo = () => root.dataset.theme || (escuroSistema() ? 'dark' : 'light');
+  try{ const t = localStorage.getItem('sementes-tema'); if(t) root.dataset.theme = t; }catch(e){}
+  const rotulo = () => { $('themeLabel').textContent = efetivo() === 'dark' ? 'Tema claro' : 'Tema escuro'; };
+  $('themeBtn').addEventListener('click', () => {
+    root.dataset.theme = efetivo() === 'dark' ? 'light' : 'dark';
+    try{ localStorage.setItem('sementes-tema', root.dataset.theme); }catch(e){}
+    rotulo();
+  });
+  rotulo();
+})();
+
+render(false);
+</script>
+</body>
+</html>
