@@ -317,6 +317,16 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 .li{display:flex; align-items:center; gap:10px; font-size:1.2rem}
 .li .dotli{width:9px; height:9px; border-radius:50%; background:var(--page-ink); flex:none}
 .el-img .content img{width:150px; height:150px; display:block}
+.li .n{font-weight:800; min-width:1.6em}
+.chip.ordem .mark{font-family:var(--font-display); font-weight:800; font-size:1.05rem; color:#fff}
+.chip small{display:block; color:var(--ink-soft); font-weight:600; font-size:.95rem}
+.chip .tag-name{font-size:1.2rem}
+.words{display:flex; flex-wrap:wrap; gap:10px}
+.word{min-height:64px; min-width:64px; padding:8px 20px; border-radius:14px; border:3px solid var(--line); background:var(--surface); font-size:1.4rem; font-weight:600; cursor:pointer}
+.word:hover{border-color:var(--primary)}
+.word[aria-pressed="true"]{border-color:var(--primary); font-weight:900; background:color-mix(in srgb,var(--primary) 14%,var(--surface))}
+.destaque strong{font-weight:900}
+.link-real{color:#1A0DAB; text-decoration:underline; font-size:1.3rem; font-weight:700}
 .quiz-wrong{border-color:var(--accent)!important; background:var(--accent-soft)!important}
 .try-msg{display:flex; gap:12px; align-items:flex-start; margin:14px 0 0; padding:14px 18px; border-radius:16px; background:var(--accent-soft); font-weight:700; font-size:1.15rem}
 
@@ -412,12 +422,13 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 <script>
 /* =====================================================================
    CONFIGURAÇÃO DO PROFESSOR
-   AULA_2_PARA_TODOS: com  false , a Aula 2 abre sozinha para cada aluno
-   quando ele termina a Aula 1. Com  true , fica aberta para todos.
+   AULAS_ABERTAS_PARA_TODOS: com  false , cada aula abre sozinha para o
+   aluno quando ele termina a anterior (Aula 2 depois da 1, Aula 3 depois
+   da 2). Com  true , todas as aulas ficam abertas para todos.
    HABILITAR_IMAGEM: passo extra de imagem na Aula 1. A imagem já é
    ensinada na Aula 2, então o normal é deixar  false.
    ===================================================================== */
-const AULA_2_PARA_TODOS = false;
+const AULAS_ABERTAS_PARA_TODOS = false;
 const HABILITAR_IMAGEM = false;
 
 /* ---------- Figuras (SVG desenhadas à mão, embutidas no arquivo) ---------- */
@@ -444,6 +455,15 @@ const srcFigura = k => 'data:image/svg+xml,' + FIGURAS[k].svg.replace(/%/g,'%25'
 const FRASES_1 = ['Eu moro em Fortaleza.','Eu gosto de música.','Estou aprendendo a usar o computador.'];
 const FRASES_2 = ['Eu gosto de cozinhar.','Meu sonho é aprender coisas novas.','Eu tenho orgulho da minha família.'];
 const SUBTITULOS = ['Coisas que eu gosto','O que eu gosto de fazer','Meus passatempos'];
+const PASSOS_CAFE = ['Ferver a água','Colocar o pó no filtro','Jogar a água quente no pó','Servir na xícara'];
+const CAFE_EMBARALHADO = [2, 0, 3, 1];
+const FRASE_DESTAQUE = ['Eu','adoro','café','com','cuscuz.'];
+const LINKS = [
+  {texto:'Conheça Fortaleza', href:'https://pt.wikipedia.org/wiki/Fortaleza', onde:'Wikipédia'},
+  {texto:'Ver o mapa', href:'https://www.google.com/maps', onde:'Google Maps'},
+  {texto:'Assistir vídeos', href:'https://www.youtube.com', onde:'YouTube'},
+  {texto:'Ler notícias', href:'https://g1.globo.com', onde:'g1'}
+];
 const ITENS = ['Música','Futebol','Cozinhar','Dançar','Ler','Novela','Praia','Família','Plantas','Viajar'];
 const TEXTO_EXEMPLO = 'Olá! Este texto está dentro do body.';
 
@@ -581,7 +601,11 @@ const AULA2 = {
       texto:'A sua página continua aqui. Lembra? A página tem um corpo, o <span class="tag-name">body</span>.',
       pronto:() => state.nome.trim() !== '' && state.quiz === 'ok',
       falta:() => state.nome.trim() ? 'Toque na resposta certa.' : 'Escreva o seu nome na caixa branca.',
-      montar:montarRevisao },
+      montar:el => montarQuiz(el, {
+        pergunta:'Onde fica tudo o que aparece na página?',
+        certo:['ok','Dentro do body'], errado:['nao','Fora do body'],
+        msgCerto:'Isso mesmo! Tudo o que aparece fica <b>dentro</b> do body. Hoje vamos colocar mais pedaços lá dentro.',
+        msgErrado:'Quase! Lembre da aula 1: fora do body, <b>não aparece</b>. Tente de novo.'}) },
     { id:'h2',
       titulo:'h2: o subtítulo',
       texto:'O <span class="tag-name">h2</span> é um subtítulo. Ele é menor que o h1 e separa a página em partes.',
@@ -653,13 +677,103 @@ const AULA2 = {
   }
 };
 
-const AULAS = {1:AULA1, 2:AULA2};
-// Aula 1 concluída = o aluno chegou na tela "Pronto!" (neste computador)
-function aula1Concluida(){
-  const st = A === AULA1 ? state : carregar(AULA1.chave, AULA1.padrao);
-  return st.max >= AULA1.passos.length - 1;
+/* =====================================================================
+   AULA 3 — ol, strong, a
+   ===================================================================== */
+const AULA3 = {
+  num:3, nome:'Números, destaques e links', chave:'sementes-basico-aula3-v1',
+  padrao:{passo:0, max:0, nome:'', quiz:'', ordem:[], destaque:-1, link:-1, etiquetas:true},
+  tags:['ol','strong','a'],
+  passos:[
+    { id:'rev',
+      titulo:'Lembrando a aula 2',
+      texto:'Na aula 2, você fez uma lista na sua página. Vamos ver se você lembra?',
+      pronto:() => state.nome.trim() !== '' && state.quiz === 'ok',
+      falta:() => state.nome.trim() ? 'Toque na resposta certa.' : 'Escreva o seu nome na caixa branca.',
+      montar:el => montarQuiz(el, {
+        pergunta:'Qual tag faz a lista com bolinhas?',
+        certo:['ok','<code class="tag-name">ul</code>'], errado:['nao','<code class="tag-name">h1</code>'], inverter:true,
+        msgCerto:'Isso! O <b>ul</b> é a lista com bolinhas, e cada item é um <b>li</b>. Hoje você vai conhecer a lista com <b>números</b>.',
+        msgErrado:'Quase! O <b>h1</b> é o título. Tente de novo.'}) },
+    { id:'ol',
+      titulo:'ol: a lista com números',
+      texto:'O <span class="tag-name">ol</span> é uma lista com <b>números</b>. O navegador conta sozinho: 1, 2, 3… Cada item também é um <span class="tag-name">li</span>.',
+      pronto:() => state.ordem.length === PASSOS_CAFE.length,
+      falta:'Toque nos 4 passos do café, na ordem.',
+      montar:montarOrdem },
+    { id:'strong',
+      titulo:'strong: o destaque',
+      texto:'O <span class="tag-name">strong</span> deixa uma palavra <b>mais forte</b>, em destaque. Ele fica <b>dentro</b> do p.',
+      pronto:() => state.destaque !== -1,
+      falta:'Toque em uma palavra para destacar.',
+      montar:montarDestaque },
+    { id:'a',
+      titulo:'a: o link',
+      texto:'O <span class="tag-name">a</span> faz um <b>link</b>: um texto que você toca para abrir outro site.',
+      pronto:() => state.link !== -1,
+      falta:'Toque em um dos sites para escolher.',
+      montar:montarLink },
+    { id:'fim', titulo:'Pronto!', texto:'', pronto:() => true, montar:montarFim }
+  ],
+  fimTexto:nome => `Parabéns${nome}! A sua página agora tem lista com números, palavra em destaque e link. Tudo <b>dentro</b> do body.`,
+  preparar(){
+    if(state.nome.trim()) return;
+    const a2 = carregar(AULA2.chave, AULA2.padrao), a1 = carregar(AULA1.chave, AULA1.padrao);
+    state.nome = a2.nome || a1.nome || '';
+  },
+  frase(){
+    return FRASE_DESTAQUE.map((w, i) => i === state.destaque ? `<strong>${esc(w)}</strong>` : esc(w)).join(' ');
+  },
+  pagina(p){
+    let html = state.nome.trim()
+      ? elemento('h1', `<div class="content hx lv1">${esc(state.nome)}</div>`, false)
+      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'rev');
+    if(visivel('ol')){
+      const novo = p === 'ol';
+      html += elemento('h2', `<div class="content hx lv2">Como fazer café</div>`, novo);
+      html += state.ordem.length
+        ? elemento('ol', `<div class="content ulbox">${state.ordem.map((k, i) => `<div class="li"><span class="tagchip">li</span><span class="n">${i + 1}.</span><span>${esc(PASSOS_CAFE[k])}</span></div>`).join('')}</div>`, novo)
+        : elemento('ol', `<div class="content slot">Os passos vão aparecer aqui, com números</div>`, novo);
+    }
+    if(visivel('strong')) html += elemento('p', `<p class="content destaque">${this.frase()}</p>`, p === 'strong');
+    if(visivel('a')){
+      const l = LINKS[state.link];
+      html += l
+        ? elemento('a', `<div class="content"><a class="link-real" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.texto)}</a></div>`, p === 'a')
+        : elemento('a', `<div class="content slot">O link vai aparecer aqui</div>`, p === 'a');
+    }
+    return html;
+  },
+  codigo(p){
+    const L = [{i:1, h:T('<h1>') + txt(state.nome, 'Seu nome') + T('</h1>')}];
+    if(visivel('ol')){
+      const novo = p === 'ol';
+      L.push({i:1, h:T('<h2>') + C('Como fazer café') + T('</h2>'), novo});
+      L.push({i:1, h:T('<ol>'), novo});
+      (state.ordem.length ? state.ordem.map(k => PASSOS_CAFE[k]) : ['']).forEach(t => L.push({i:2, h:T('<li>') + txt(t, 'Passo') + T('</li>'), novo}));
+      L.push({i:1, h:T('</ol>'), novo});
+    }
+    if(visivel('strong')){
+      const partes = FRASE_DESTAQUE.map((w, i) => i === state.destaque ? T('<strong>') + C(w) + T('</strong>') : C(w)).join(C(' '));
+      L.push({i:1, h:T('<p>') + partes + T('</p>'), novo:p === 'strong'});
+    }
+    if(visivel('a')){
+      const l = LINKS[state.link];
+      L.push({i:1, h: l
+        ? T('<a href="') + C(l.href) + T('" target="_blank">') + C(l.texto) + T('</a>')
+        : T('<a href="') + PH('endereço') + T('">') + PH('Texto do link') + T('</a>'), novo:p === 'a'});
+    }
+    return L;
+  }
+};
+
+const AULAS = {1:AULA1, 2:AULA2, 3:AULA3};
+// Aula concluída = o aluno chegou na tela "Pronto!" dela (neste computador)
+function concluida(n){
+  const a = AULAS[n], st = A === a ? state : carregar(a.chave, a.padrao);
+  return st.max >= a.passos.length - 1;
 }
-const liberada = n => n === 1 || (n === 2 && (AULA_2_PARA_TODOS || aula1Concluida()));
+const liberada = n => n === 1 || (!!AULAS[n] && (AULAS_ABERTAS_PARA_TODOS || concluida(n - 1)));
 
 /* ---------- Peças da prévia e do código ---------- */
 const T = s => `<span class="t">${esc(s)}</span>`;
@@ -739,30 +853,76 @@ function montarImagem(el, chaves){
   }));
 }
 
-function montarRevisao(el){
+function montarQuiz(el, q){
   const pedirNome = el.dataset.pedirNome === '1' || !state.nome.trim();
   el.dataset.pedirNome = pedirNome ? '1' : '';
+  const opcao = ([r, texto], errada) => `<button class="chip${errada && state.quiz === 'nao' ? ' quiz-wrong' : ''}" type="button" data-r="${r}" aria-pressed="${!errada && state.quiz === 'ok'}"><span class="mark">${ICO.check}</span><span>${texto}</span></button>`;
   el.innerHTML = `
     ${pedirNome ? `
       <label class="label" for="campo">Escreva o seu nome para começar:</label>
       <input class="field" id="campo" type="text" maxlength="40" autocomplete="off" spellcheck="false" autocapitalize="words"
         placeholder="Ex.: Maria da Silva" value="${esc(state.nome)}">
       <p class="or">Agora, uma pergunta:</p>` : ''}
-    <p class="label">Onde fica tudo o que aparece na página?</p>
-    <div class="stack">
-      <button class="chip" type="button" data-r="ok" aria-pressed="${state.quiz === 'ok'}"><span class="mark">${ICO.check}</span><span>Dentro do body</span></button>
-      <button class="chip${state.quiz === 'nao' ? ' quiz-wrong' : ''}" type="button" data-r="nao" aria-pressed="false"><span class="mark">${ICO.check}</span><span>Fora do body</span></button>
-    </div>
-    ${state.quiz === 'ok' ? `<p class="ok-msg">${ICO.star}<span>Isso mesmo! Tudo o que aparece fica <b>dentro</b> do body. Hoje vamos colocar mais pedaços lá dentro.</span></p>` : ''}
-    ${state.quiz === 'nao' ? `<p class="try-msg">${ICO.hint}<span>Quase! Lembre da aula 1: fora do body, <b>não aparece</b>. Tente de novo.</span></p>` : ''}`;
+    <p class="label">${q.pergunta}</p>
+    <div class="stack">${q.inverter ? opcao(q.errado, true) + opcao(q.certo, false) : opcao(q.certo, false) + opcao(q.errado, true)}</div>
+    ${state.quiz === 'ok' ? `<p class="ok-msg">${ICO.star}<span>${q.msgCerto}</span></p>` : ''}
+    ${state.quiz === 'nao' ? `<p class="try-msg">${ICO.hint}<span>${q.msgErrado}</span></p>` : ''}`;
   const input = $('campo');
   if(input){
     input.addEventListener('input', () => { aplicarMaiuscula(input, maiusculaNome); state.nome = input.value; salvar(); atualizarPagina(); limparAviso(); });
     input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); avancar(); } });
   }
   el.querySelectorAll('[data-r]').forEach(b => b.addEventListener('click', () => {
-    state.quiz = b.dataset.r; salvar(); limparAviso(); montarRevisao(el);
+    state.quiz = b.dataset.r; salvar(); limparAviso(); montarQuiz(el, q);
     const volta = el.querySelector(`[data-r="${b.dataset.r}"]`); if(volta) volta.focus();
+  }));
+}
+
+function montarOrdem(el){
+  const n = PASSOS_CAFE.length, completa = state.ordem.length === n;
+  const certa = completa && state.ordem.every((v, i) => v === i);
+  el.innerHTML = `
+    <p class="label">Como fazer café? Toque nos passos <b>na ordem certa</b>:</p>
+    <div class="stack">${CAFE_EMBARALHADO.map(k => {
+      const pos = state.ordem.indexOf(k);
+      return `<button class="chip ordem" type="button" data-k="${k}" aria-pressed="${pos !== -1}">
+        <span class="mark">${pos !== -1 ? pos + 1 : ''}</span><span>${esc(PASSOS_CAFE[k])}</span></button>`;
+    }).join('')}</div>
+    ${certa ? `<p class="ok-msg">${ICO.star}<span>Isso! Numa lista com números, <b>a ordem importa</b>. O navegador numera sozinho.</span></p>` : ''}
+    ${completa && !certa ? `<p class="try-msg">${ICO.hint}<span>Hmm… será que essa é a ordem? Toque num passo para tirar e tente de novo.</span></p>` : ''}
+    ${state.ordem.length ? `<button class="btn btn-ghost btn-wide" id="limparOrdem" type="button" style="margin-top:14px">${ICO.again} Apagar a lista e começar de novo</button>` : ''}`;
+  el.querySelectorAll('.ordem').forEach(b => b.addEventListener('click', () => {
+    const k = +b.dataset.k;
+    state.ordem = state.ordem.includes(k) ? state.ordem.filter(x => x !== k) : state.ordem.concat([k]);
+    salvar(); limparAviso(); montarOrdem(el); atualizarPagina();
+    const volta = el.querySelector(`.ordem[data-k="${k}"]`); if(volta) volta.focus();
+  }));
+  const limpar = $('limparOrdem');
+  if(limpar) limpar.onclick = () => { state.ordem = []; salvar(); montarOrdem(el); atualizarPagina(); };
+}
+
+function montarDestaque(el){
+  el.innerHTML = `
+    <p class="label">Toque na palavra que você quer destacar:</p>
+    <div class="words">${FRASE_DESTAQUE.map((w, i) => `
+      <button class="word" type="button" data-i="${i}" aria-pressed="${state.destaque === i}">${esc(w)}</button>`).join('')}</div>
+    ${state.destaque !== -1 ? `<p class="ok-msg">${ICO.check}<span>Veja na sua página: a palavra ficou <b>mais forte</b>. No código, o <b>strong</b> está <b>dentro</b> do p.</span></p>` : ''}`;
+  el.querySelectorAll('.word').forEach(b => b.addEventListener('click', () => {
+    state.destaque = +b.dataset.i; salvar(); limparAviso(); montarDestaque(el); atualizarPagina();
+    el.querySelector(`.word[data-i="${b.dataset.i}"]`).focus();
+  }));
+}
+
+function montarLink(el){
+  el.innerHTML = `
+    <p class="label">Escolha para onde o seu link vai:</p>
+    <div class="stack">${LINKS.map((l, i) => `
+      <button class="chip" type="button" data-i="${i}" aria-pressed="${state.link === i}">
+        <span class="mark">${ICO.check}</span><span>${esc(l.texto)}<small>abre o site: ${esc(l.onde)}</small></span></button>`).join('')}</div>
+    ${state.link !== -1 ? `<p class="ok-msg">${ICO.star}<span>Agora toque no <b>link azul</b>, lá na sua página, para testar. Ele abre o site em <b>outra aba</b>. Para voltar, feche a aba nova.</span></p>` : ''}`;
+  el.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+    state.link = +b.dataset.i; salvar(); limparAviso(); montarLink(el); atualizarPagina();
+    el.querySelector(`.chip[data-i="${b.dataset.i}"]`).focus();
   }));
 }
 
@@ -907,7 +1067,7 @@ function avancar(){
 }
 function avisar(msg){
   $('nudge').textContent = msg;
-  const alvo = $('campo') && !$('campo').value.trim() && atual().id !== 'lista' ? $('campo') : ($('acao') || $('interact').querySelector('.chip, .lvl'));
+  const alvo = $('campo') && !$('campo').value.trim() && atual().id !== 'lista' ? $('campo') : ($('acao') || $('interact').querySelector('.chip, .lvl, .word'));
   if(alvo){ alvo.classList.remove('attention'); void alvo.offsetWidth; alvo.classList.add('attention'); }
 }
 function limparAviso(){ $('nudge').textContent = ''; }
@@ -919,11 +1079,11 @@ $('prevBtn').addEventListener('click', () => { if(state.passo > 0){ state.passo-
 function mostrarInicio(focar){
   A = null;
   $('home').hidden = false; $('trilha').hidden = true; $('stepsNav').hidden = true; $('navBar').hidden = true; $('homeBtn').hidden = true;
-  $('aulas').innerHTML = [1,2].map(n => {
+  $('aulas').innerHTML = Object.keys(AULAS).map(Number).map(n => {
     const a = AULAS[n], st = carregar(a.chave, a.padrao), fim = a.passos.length - 1;
     const feita = st.max >= fim, comecou = st.max > 0 || st.passo > 0;
     const livre = liberada(n);
-    const status = !livre ? `${ICO.lock} Termine a Aula 1 para abrir`
+    const status = !livre ? `${ICO.lock} Termine a Aula ${n - 1} para abrir`
       : feita ? `${ICO.check} Feita! Abrir de novo`
       : comecou ? `${ICO.next} Continuar`
       : `${ICO.next} Começar`;
