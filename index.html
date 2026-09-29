@@ -327,6 +327,14 @@ svg.ico{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-
 .word[aria-pressed="true"]{border-color:var(--primary); font-weight:900; background:color-mix(in srgb,var(--primary) 14%,var(--surface))}
 .destaque strong{font-weight:900}
 .link-real{color:#1A0DAB; text-decoration:underline; font-size:1.3rem; font-weight:700}
+.toggles .chip.mini{min-height:56px; font-size:1.1rem; padding:8px 14px}
+.tabela{border-collapse:collapse; font-size:1.1rem; max-width:100%}
+.tabela th,.tabela td{border:2px solid #9FB6CC; padding:8px 12px; text-align:left}
+.tabela th{background:#DDEBF6}
+.tabela td.trchip{border:0; padding:0 8px 0 0; vertical-align:middle}
+.tabela tr.row-new td:not(.trchip){background:#FFF1DE}
+.tab-legenda{margin:8px 0 0; font-size:.95rem; color:#56697C}
+.el-table .content{overflow-x:auto}
 .quiz-wrong{border-color:var(--accent)!important; background:var(--accent-soft)!important}
 .try-msg{display:flex; gap:12px; align-items:flex-start; margin:14px 0 0; padding:14px 18px; border-radius:16px; background:var(--accent-soft); font-weight:700; font-size:1.15rem}
 
@@ -464,6 +472,8 @@ const LINKS = [
   {texto:'Assistir vídeos', href:'https://www.youtube.com', onde:'YouTube'},
   {texto:'Ler notícias', href:'https://g1.globo.com', onde:'g1'}
 ];
+const DIAS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+const ATIVIDADES = ['Trabalhar','Estudar','Descansar','Cozinhar','Ver a família','Jogar bola','Ir à feira','Passear'];
 const ITENS = ['Música','Futebol','Cozinhar','Dançar','Ler','Novela','Praia','Família','Plantas','Viajar'];
 const TEXTO_EXEMPLO = 'Olá! Este texto está dentro do body.';
 
@@ -767,7 +777,77 @@ const AULA3 = {
   }
 };
 
-const AULAS = {1:AULA1, 2:AULA2, 3:AULA3};
+/* =====================================================================
+   AULA 4 — table, tr, th, td
+   ===================================================================== */
+const AULA4 = {
+  num:4, nome:'Tabelas', chave:'sementes-basico-aula4-v1',
+  padrao:{passo:0, max:0, nome:'', quiz:'', tabela:false, linhas:[], etiquetas:true},
+  tags:['table','tr','th','td'],
+  passos:[
+    { id:'rev',
+      titulo:'Lembrando a aula 3',
+      texto:'Na aula 3, você colocou um link na sua página. Vamos ver se você lembra?',
+      pronto:() => state.nome.trim() !== '' && state.quiz === 'ok',
+      falta:() => state.nome.trim() ? 'Toque na resposta certa.' : 'Escreva o seu nome na caixa branca.',
+      montar:el => montarQuiz(el, {
+        pergunta:'Qual tag faz um link?',
+        certo:['ok','<code class="tag-name">a</code>'], errado:['nao','<code class="tag-name">p</code>'],
+        msgCerto:'Isso! O <b>a</b> é o link. Hoje você vai aprender a fazer uma <b>tabela</b>.',
+        msgErrado:'Quase! O <b>p</b> é o parágrafo, o texto normal. Tente de novo.'}) },
+    { id:'table',
+      titulo:'table: a tabela',
+      texto:'A <span class="tag-name">table</span> é uma tabela: uma grade com <b>linhas</b> e <b>colunas</b>, como um quadro de horários. Ela fica <b>dentro</b> do body.',
+      pronto:() => state.tabela,
+      falta:'Toque no botão azul para colocar a tabela.',
+      montar:montarTabela },
+    { id:'linhas',
+      titulo:'tr e td: linhas e quadradinhos',
+      texto:'Cada <b>linha</b> é um <span class="tag-name">tr</span>. Cada <b>quadradinho</b> é um <span class="tag-name">td</span>. O td fica dentro do tr, e o tr fica dentro da table.',
+      pronto:() => state.linhas.length >= 2,
+      falta:() => state.linhas.length ? 'Coloque mais uma linha na tabela.' : 'Escolha um dia, o que você faz e toque em “Colocar a linha”.',
+      montar:montarLinhas },
+    { id:'fim', titulo:'Pronto!', texto:'', pronto:() => true, montar:montarFim }
+  ],
+  fimTexto:nome => `Parabéns${nome}! Você fez uma tabela: a <b>table</b> guarda as linhas (<b>tr</b>), e as linhas guardam os quadradinhos (<b>th</b> e <b>td</b>). Caixa dentro de caixa, tudo dentro do body.`,
+  preparar(){
+    if(state.nome.trim()) return;
+    for(const a of [AULA3, AULA2, AULA1]){ const st = carregar(a.chave, a.padrao); if(st.nome){ state.nome = st.nome; return; } }
+  },
+  pagina(p){
+    let html = state.nome.trim()
+      ? elemento('h1', `<div class="content hx lv1">${esc(state.nome)}</div>`, false)
+      : elemento('h1', `<div class="content slot">O seu nome vai aparecer aqui</div>`, p === 'rev');
+    if(visivel('table') && state.tabela){
+      const linha = (cels, tag, novo) => `<tr class="${novo ? 'row-new' : ''}"><td class="trchip"><span class="tagchip">tr</span></td>${cels.map(c => `<${tag}>${esc(c)}</${tag}>`).join('')}</tr>`;
+      const corpo = state.linhas.map((l, i) => linha(l, 'td', p === 'linhas' && i === state.linhas.length - 1)).join('');
+      html += elemento('table', `<div class="content"><table class="tabela">${linha(['Dia','O que eu faço'], 'th', false)}${corpo}</table>
+        ${!state.linhas.length && visivel('linhas') ? '<div class="slot" style="margin-top:8px">As suas linhas vão aparecer aqui</div>' : ''}
+        <p class="tab-legenda"><b>th</b> = nome da coluna · <b>td</b> = cada quadradinho</p></div>`, p === 'table');
+    } else if(visivel('table')){
+      html += elemento('table', `<div class="content slot">A tabela vai aparecer aqui</div>`, true);
+    }
+    return html;
+  },
+  codigo(p){
+    const L = [{i:1, h:T('<h1>') + txt(state.nome, 'Seu nome') + T('</h1>')}];
+    if(visivel('table') && state.tabela){
+      const novoT = p === 'table';
+      const linha = (cels, tag, novo) => {
+        L.push({i:2, h:T('<tr>'), novo});
+        cels.forEach(c => L.push({i:3, h:T(`<${tag}>`) + C(c) + T(`</${tag}>`), novo}));
+        L.push({i:2, h:T('</tr>'), novo});
+      };
+      L.push({i:1, h:T('<table>'), novo:novoT});
+      linha(['Dia','O que eu faço'], 'th', novoT);
+      state.linhas.forEach((l, i) => linha(l, 'td', p === 'linhas' && i === state.linhas.length - 1));
+      L.push({i:1, h:T('</table>'), novo:novoT});
+    }
+    return L;
+  }
+};
+
+const AULAS = {1:AULA1, 2:AULA2, 3:AULA3, 4:AULA4};
 // Aula concluída = o aluno chegou na tela "Pronto!" dela (neste computador)
 function concluida(n){
   const a = AULAS[n], st = A === a ? state : carregar(a.chave, a.padrao);
@@ -924,6 +1004,48 @@ function montarLink(el){
     state.link = +b.dataset.i; salvar(); limparAviso(); montarLink(el); atualizarPagina();
     el.querySelector(`.chip[data-i="${b.dataset.i}"]`).focus();
   }));
+}
+
+function montarTabela(el){
+  if(!state.tabela){
+    el.innerHTML = `<button class="btn btn-primary btn-wide" id="acao" type="button">${ICO.plus} Colocar uma tabela dentro do body</button>`;
+    $('acao').onclick = () => { state.tabela = true; salvar(); limparAviso(); montarTabela(el); atualizarPagina(); };
+    return;
+  }
+  el.innerHTML = `
+    <button class="btn btn-success btn-wide" type="button" aria-disabled="true">${ICO.check} A tabela entrou no body!</button>
+    <p class="ok-msg">${ICO.hint}<span>A primeira linha da tabela tem os <b>nomes das colunas</b>: “Dia” e “O que eu faço”. Cada nome é um <b>th</b>. No próximo passo, você coloca as outras linhas.</span></p>`;
+}
+
+function montarLinhas(el){
+  const escolha = el._escolha || (el._escolha = {dia:'', ativ:''});
+  const botoes = (lista, campo) => lista.map(t => `<button class="chip mini" type="button" data-campo="${campo}" data-v="${esc(t)}" aria-pressed="${escolha[campo] === t}"><span class="mark">${ICO.check}</span><span>${esc(t)}</span></button>`).join('');
+  el.innerHTML = `
+    <p class="label">1. Toque em um dia:</p>
+    <div class="toggles">${botoes(DIAS, 'dia')}</div>
+    <p class="label" style="margin-top:20px">2. Toque no que você faz nesse dia:</p>
+    <div class="toggles">${botoes(ATIVIDADES, 'ativ')}</div>
+    <button class="btn btn-primary btn-wide" id="addLinha" type="button" style="margin-top:20px">${ICO.plus} Colocar a linha na tabela</button>
+    ${state.linhas.length ? `<button class="btn btn-ghost btn-wide" id="tiraLinha" type="button" style="margin-top:12px">${ICO.again} Tirar a última linha</button>` : ''}
+    ${state.linhas.length >= 2 ? `<p class="ok-msg">${ICO.star}<span>Muito bem! Cada linha é um <b>tr</b>, e cada quadradinho é um <b>td</b>. Pode colocar mais linhas, se quiser.</span></p>` : ''}
+    <p class="try-msg" id="faltaLinha" hidden>${ICO.hint}<span></span></p>`;
+  el.querySelectorAll('[data-campo]').forEach(b => b.addEventListener('click', () => {
+    escolha[b.dataset.campo] = b.dataset.v;
+    el.querySelectorAll(`[data-campo="${b.dataset.campo}"]`).forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === b.dataset.v)));
+    $('faltaLinha').hidden = true;
+  }));
+  $('addLinha').onclick = () => {
+    if(!escolha.dia || !escolha.ativ){
+      const m = $('faltaLinha'); m.hidden = false;
+      m.querySelector('span').textContent = !escolha.dia ? 'Primeiro, toque em um dia.' : 'Agora, toque no que você faz nesse dia.';
+      return;
+    }
+    state.linhas = state.linhas.concat([[escolha.dia, escolha.ativ]]);
+    el._escolha = {dia:'', ativ:''};
+    salvar(); limparAviso(); montarLinhas(el); atualizarPagina(); $('addLinha').focus();
+  };
+  const tira = $('tiraLinha');
+  if(tira) tira.onclick = () => { state.linhas = state.linhas.slice(0, -1); salvar(); montarLinhas(el); atualizarPagina(); };
 }
 
 function montarNiveis(el){
